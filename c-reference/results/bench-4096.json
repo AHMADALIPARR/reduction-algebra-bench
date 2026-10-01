@@ -1,0 +1,18 @@
+{
+  "benchmark": "subleq-field-reduce",
+  "n": 4096,
+  "repetitions": 100,
+  "correctness": "PASS",
+  "result": 8761732612468,
+  "best_ns": 23015,
+  "mean_ns": 24875.12,
+  "elements_per_second_best": 177970888.55,
+  "nodes": 10,
+  "leaves": 4,
+  "tree_depth": 6,
+  "critical_path": 6,
+  "operation_nodes": 6,
+  "subleq_ops": 20480,
+  "field_ops": 2040,
+  "intermediate_arrays": 5
+}
