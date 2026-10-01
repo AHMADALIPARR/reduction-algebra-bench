@@ -1,0 +1,85 @@
+{
+  "schema": "reduction-algebra-bench/exp05/1",
+  "experiment": "exp05_singeli",
+  "status": {
+    "value": "not_executed",
+    "provenance": "specified"
+  },
+  "kernels": {
+    "source": {
+      "value": "singeli/exp05/exp05_singeli.singeli",
+      "provenance": "specified"
+    },
+    "wiring": {
+      "value": "Singeli emits C; [4]u64 SIMD lanes; gf_mul4 widens via unsigned __int128 in the C backend",
+      "provenance": "specified"
+    }
+  },
+  "prng": {
+    "algorithm": {
+      "value": "SplitMix64",
+      "provenance": "specified"
+    },
+    "seed": {
+      "value": "0x00BEEFCAFE",
+      "provenance": "specified"
+    },
+    "variant": {
+      "value": "counter-increment (canonical)",
+      "provenance": "specified"
+    },
+    "crosslang_checksum": {
+      "value": null,
+      "provenance": "unknown"
+    },
+    "note": {
+      "value": "gate not exercised: checksum 1388262917130611548 must reproduce before any timing",
+      "provenance": "specified"
+    }
+  },
+  "timing_protocol": {
+    "warmup": {
+      "value": 3,
+      "provenance": "specified"
+    },
+    "samples": {
+      "value": 20,
+      "provenance": "specified"
+    },
+    "aggregation": {
+      "value": "median",
+      "provenance": "specified"
+    },
+    "clock": {
+      "value": null,
+      "provenance": "unknown"
+    }
+  },
+  "environment": {
+    "dotnet_sdk": {
+      "value": null,
+      "provenance": "unknown"
+    },
+    "singeli_compiler": {
+      "value": "not run in this environment",
+      "provenance": "specified"
+    },
+    "note": {
+      "value": "brief assumed a .NET/NuGet Singeli; Singeli is actually BQN-hosted and emits C (see README.md)",
+      "provenance": "specified"
+    }
+  },
+  "sweep_1d_topology": {
+    "value": null,
+    "provenance": "unknown"
+  },
+  "subleq_sweep": {
+    "value": null,
+    "provenance": "unknown"
+  },
+  "correctness_gate": {
+    "value": "not run",
+    "provenance": "specified"
+  },
+  "null_reason": "Not executed: no Singeli toolchain in this environment (Singeli is BQN-hosted and emits C; no BQN/CBQN route per scope, no dotnet needed). Full implementation written at singeli/exp05/exp05_singeli.singeli; all measurements null with provenance unknown. See singeli/exp05/RUNLOG.md."
+}

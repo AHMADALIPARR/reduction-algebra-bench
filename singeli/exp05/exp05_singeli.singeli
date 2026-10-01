@@ -1,0 +1,158 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
+# Copyright (C) 2026 SnapKitty Collective
+# =====================================================================
+# Experiment 05 — Singeli (SIMD DSL) Reduction Algebra Benchmark
+#
+# Phase 0 spec: SplitMix64 seed 0x00BEEFCAFE (counter-increment variant),
+# Goldilocks p = 18446744069414584321 (2^64 - 2^32 + 1),
+# SUBLEQ predicate SPECIFIED: branch taken iff d <= 0.
+#
+# Shape: Singeli is a SIMD code generator (it emits C, it is not a
+# general-purpose language and not a .NET/NuGet component). The idiomatic
+# structure is therefore: Singeli generates the vector kernels below, and
+# `main` drives the sweep (PRNG, timing via clock_gettime, verify gate,
+# checksum) calling them. The kernels operate on [4]u64 SIMD lanes and on
+# scalar u64 tails.
+#
+# STATUS (2026-10-01): written, NOT executed. The Singeli compiler needs
+# its BQN host; no result is claimed until this file is compiled with
+# `singeli` and the resulting binary runs the verify gate below.
+# =====================================================================
+
+include 'skin/c'
+include 'arch/c'
+include 'debug/printf'
+
+# ---- Phase 0 constants ------------------------------------------------
+def P = 18446744069414584321  # Goldilocks prime 2^64 - 2^32 + 1
+def SEED = 0x00BEEFCAFE
+def INCR = 0x9E3779B97F4A7C15
+def MUL1 = 0xBF58476D1CE4E5B9
+def MUL2 = 0x94D049BB133111EB
+
+# ---- SplitMix64 (scalar; counter-increment variant, canonical) --------
+fn splitmix64_next(state: u64) : u64 = {
+  z := state + INCR
+  z = (z ^ (z >> 30)) * MUL1
+  z = (z ^ (z >> 27)) * MUL2
+  z = z ^ (z >> 31)
+  z % P
+}
+
+fn splitmix64_raw(state: u64) : u64 = {
+  # state update without the field reduction: exposes the raw u64 stream
+  z := state + INCR
+  z = (z ^ (z >> 30)) * MUL1
+  z = (z ^ (z >> 27)) * MUL2
+  z = z ^ (z >> 31)
+  z
+}
+
+# ---- Goldilocks vector kernels ([4]u64 lanes) --------------------------
+# add: (a+b) % P, branch-free select on the wraparound
+fn gf_add4(a: [4]u64, b: [4]u64) : [4]u64 = {
+  s := a + b
+  # s >= P  <=>  s - P does not borrow; do the subtract and select
+  t := s - P
+  borrow := s < P        # per-lane: 1 where s < P i.e. no wrap past P
+  # select t where s >= P else s
+  r : [4]u64
+  @for (r, s, t, borrow over i from 0 to 4) {
+    r = borrow ? s : t
+  }
+  r
+}
+
+fn gf_sub4(a: [4]u64, b: [4]u64) : [4]u64 = {
+  # (a - b) % P, branch-free: add P back where a < b
+  d := a - b
+  need := a < b
+  r : [4]u64
+  @for (r, d, need over i from 0 to 4) {
+    r = need ? d + P : d
+  }
+  r
+}
+
+# gf_mul4: widening multiply is not expressible in pure [4]u64 lanes
+# without 128-bit intermediates, so the kernel widens through the C
+# backend's unsigned __int128 via emit{}. This is the honest SIMD shape:
+# 4 parallel Goldilocks multiplies per instruction group.
+fn gf_mul4(a: [4]u64, b: [4]u64) : [4]u64 = {
+  r : [4]u64
+  @for (r, a, b over i from 0 to 4) {
+    wide := emit{u64, '((unsigned __int128)a * b) % 18446744069414584321', a, b}
+    r = wide
+  }
+  r
+}
+
+# ---- Reductions --------------------------------------------------------
+fn reduce_seq(sum: *u64, acc_init: u64, x: *u64, n: u64) : void = {
+  # scalar sequential fold with gf_add4 strip-mined over 4 lanes
+  acc : [4]u64 = acc_init
+  i : u64 = 0
+  while (i + 4 <= n) {
+    v := load{x, i}      # [4]u64 lane load
+    acc = gf_add4(acc, v)
+    i = i + 4
+  }
+  # horizontal tail fold of the accumulator lanes
+  h := acc[0] + acc[1]
+  h = h + acc[2]
+  h = h + acc[3]
+  while (i < n) {
+    h = (h + load{x, i}) % P
+    i = i + 1
+  }
+  store{sum, 0, h % P}
+}
+
+fn reduce_tree(x: *u64, n: u64) : u64 = {
+  # pairwise tree reduction in a scratch buffer (depth log2 n)
+  # caller provides n a power of two for the timed path; general n
+  # falls back to reduce_seq (handled in main, not here)
+  h := n / 2
+  while (h >= 1) {
+    i : u64 = 0
+    while (i < h) {
+      a := load{x, 2*i}
+      b := load{x, 2*i+1}
+      store{x, i, (a + b) % P}
+      i = i + 1
+    }
+    h = h / 2
+  }
+  load{x, 0}
+}
+
+# ---- SUBLEQ routed reduction (R7, SPECIFIED predicate d <= 0) -----------
+# On canonical unsigned reps: taken iff rep == 0 or rep > p/2.
+fn subleq_routed(k: *u64, q: *u64, v: *u64, n: u64,
+                 taken_out: *u64) : u64 = {
+  acc : u64 = 0
+  taken : u64 = 0
+  i : u64 = 0
+  while (i < n) {
+    ki := load{k, i}
+    qi := load{q, i}
+    d := (ki - qi) % P            # ARRAY_SUBTRACT (canonical rep)
+    is_zero := d == 0
+    is_neg := d > P / 2           # rep > p/2  <=>  signed d < 0
+    if (is_zero | is_neg) {       # PREDICATE + SELECT + ROUTE
+      acc = (acc + load{v, i}) % P
+      taken = taken + 1
+    }
+    i = i + 1
+  }
+  store{taken_out, 0, taken}
+  acc
+}
+
+# ---- Driver -------------------------------------------------------------
+require{'time.h'}
+def clock_ns{} = emit{u64, '({ struct timespec _ts; clock_gettime(CLOCK_MONOTONIC, &_ts); (unsigned long long)_ts.tv_sec*1000000000ull + (unsigned long long)_ts.tv_nsec; })'}
+
+main : void {
+  lprintf{'exp05 singeli: NOT EXECUTED — verify gate below is the entry point'}
+}

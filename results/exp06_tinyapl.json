@@ -1,0 +1,708 @@
+{
+  "schema": {
+    "value": "reduction-algebra-bench/exp06/1",
+    "provenance": "specified"
+  },
+  "experiment": {
+    "value": "exp06_tinyapl",
+    "provenance": "specified"
+  },
+  "language": {
+    "name": {
+      "value": "TinyAPL",
+      "provenance": "specified"
+    },
+    "identity": {
+      "value": "RubenVerg/TinyAPL: a tiny APL dialect interpreter in Haskell (NOT a C interpreter; the brief premise github.com/TinyAPL/TinyAPL 404s)",
+      "provenance": "specified"
+    },
+    "version": {
+      "value": "0.12.0.0 (native Linux binary)",
+      "provenance": "measured"
+    }
+  },
+  "prng": {
+    "algorithm": {
+      "value": "SplitMix64",
+      "provenance": "specified"
+    },
+    "seed": {
+      "value": "0x00BEEFCAFE",
+      "provenance": "specified"
+    },
+    "variant": {
+      "value": "counter-increment (canonical)",
+      "provenance": "specified"
+    },
+    "crosslang_checksum": {
+      "value": 1388262917130611548,
+      "provenance": "measured"
+    },
+    "stream_embedded_as_literals": {
+      "value": "SplitMix64 stream generated in Python (substrate) and embedded as APL literals; the interpreter xor-heavy stream gen is ~27 ms/element and xor is not used by any timed kernel. The APL MkStream dfn is present and self-test-verified, but not on the timed path.",
+      "provenance": "specified"
+    }
+  },
+  "field": {
+    "modulus": {
+      "value": "18446744069414584321 (2^64 - 2^32 + 1, Goldilocks)",
+      "provenance": "specified"
+    },
+    "representation": {
+      "value": "exact 4x16-bit limbs (f64 cannot represent p exactly)",
+      "provenance": "specified"
+    }
+  },
+  "subleq_predicate": {
+    "value": "taken iff d <= 0 (unsigned reps: rep == 0 or rep > p//2)",
+    "provenance": "specified"
+  },
+  "timing_protocol": {
+    "warmup": {
+      "value": 3,
+      "provenance": "specified"
+    },
+    "samples": {
+      "value": 20,
+      "provenance": "specified"
+    },
+    "aggregation": {
+      "value": "median",
+      "provenance": "specified"
+    },
+    "clock": {
+      "value": "\u2395unix fractional seconds",
+      "provenance": "measured"
+    },
+    "unrolled": {
+      "value": "\u237a\u237a function operands unsupported; 3+20 calls unrolled by Python codegen",
+      "provenance": "specified"
+    }
+  },
+  "verify_before_record": {
+    "value": true,
+    "provenance": "derived"
+  },
+  "null_reasons": {
+    "value": [],
+    "provenance": "specified"
+  },
+  "measurements": [
+    {
+      "n": {
+        "value": 128,
+        "provenance": "specified"
+      },
+      "kernel": {
+        "value": "sum",
+        "provenance": "specified"
+      },
+      "median_seconds": {
+        "value": 0.0023850202560424805,
+        "provenance": "measured"
+      },
+      "samples": {
+        "value": 20,
+        "provenance": "measured"
+      },
+      "escape_verified": {
+        "value": true,
+        "provenance": "derived"
+      }
+    },
+    {
+      "n": {
+        "value": 128,
+        "provenance": "specified"
+      },
+      "kernel": {
+        "value": "product",
+        "provenance": "specified"
+      },
+      "median_seconds": {
+        "value": 0.34059059619903564,
+        "provenance": "measured"
+      },
+      "samples": {
+        "value": 20,
+        "provenance": "measured"
+      },
+      "escape_verified": {
+        "value": true,
+        "provenance": "derived"
+      }
+    },
+    {
+      "n": {
+        "value": 128,
+        "provenance": "specified"
+      },
+      "kernel": {
+        "value": "min",
+        "provenance": "specified"
+      },
+      "median_seconds": {
+        "value": 0.0009239912033081055,
+        "provenance": "measured"
+      },
+      "samples": {
+        "value": 20,
+        "provenance": "measured"
+      },
+      "escape_verified": {
+        "value": true,
+        "provenance": "derived"
+      }
+    },
+    {
+      "n": {
+        "value": 128,
+        "provenance": "specified"
+      },
+      "kernel": {
+        "value": "max",
+        "provenance": "specified"
+      },
+      "median_seconds": {
+        "value": 0.0008140802383422852,
+        "provenance": "measured"
+      },
+      "samples": {
+        "value": 20,
+        "provenance": "measured"
+      },
+      "escape_verified": {
+        "value": true,
+        "provenance": "derived"
+      }
+    },
+    {
+      "n": {
+        "value": 128,
+        "provenance": "specified"
+      },
+      "kernel": {
+        "value": "scan",
+        "provenance": "specified"
+      },
+      "median_seconds": {
+        "value": 0.571876049041748,
+        "provenance": "measured"
+      },
+      "samples": {
+        "value": 20,
+        "provenance": "measured"
+      },
+      "escape_verified": {
+        "value": true,
+        "provenance": "derived"
+      }
+    },
+    {
+      "n": {
+        "value": 128,
+        "provenance": "specified"
+      },
+      "kernel": {
+        "value": "tree_reduction",
+        "provenance": "specified"
+      },
+      "median_seconds": {
+        "value": 0.06973159313201904,
+        "provenance": "measured"
+      },
+      "samples": {
+        "value": 20,
+        "provenance": "measured"
+      },
+      "escape_verified": {
+        "value": true,
+        "provenance": "derived"
+      }
+    },
+    {
+      "n": {
+        "value": 128,
+        "provenance": "specified"
+      },
+      "kernel": {
+        "value": "segmented_reduction",
+        "provenance": "specified"
+      },
+      "median_seconds": {
+        "value": 0.02365589141845703,
+        "provenance": "measured"
+      },
+      "samples": {
+        "value": 20,
+        "provenance": "measured"
+      },
+      "escape_verified": {
+        "value": true,
+        "provenance": "derived"
+      }
+    },
+    {
+      "n": {
+        "value": 128,
+        "provenance": "specified"
+      },
+      "kernel": {
+        "value": "subleq_subtract",
+        "provenance": "specified"
+      },
+      "median_seconds": {
+        "value": 0.03140532970428467,
+        "provenance": "measured"
+      },
+      "samples": {
+        "value": 20,
+        "provenance": "measured"
+      },
+      "escape_verified": {
+        "value": true,
+        "provenance": "derived"
+      }
+    },
+    {
+      "n": {
+        "value": 128,
+        "provenance": "specified"
+      },
+      "kernel": {
+        "value": "subleq_compare",
+        "provenance": "specified"
+      },
+      "median_seconds": {
+        "value": 0.0021392107009887695,
+        "provenance": "measured"
+      },
+      "samples": {
+        "value": 20,
+        "provenance": "measured"
+      },
+      "escape_verified": {
+        "value": true,
+        "provenance": "derived"
+      }
+    },
+    {
+      "n": {
+        "value": 128,
+        "provenance": "specified"
+      },
+      "kernel": {
+        "value": "subleq_route",
+        "provenance": "specified"
+      },
+      "median_seconds": {
+        "value": 0.0009609460830688477,
+        "provenance": "measured"
+      },
+      "samples": {
+        "value": 20,
+        "provenance": "measured"
+      },
+      "escape_verified": {
+        "value": true,
+        "provenance": "derived"
+      }
+    },
+    {
+      "n": {
+        "value": 128,
+        "provenance": "specified"
+      },
+      "kernel": {
+        "value": "subleq_reduce",
+        "provenance": "specified"
+      },
+      "median_seconds": {
+        "value": 0.002064347267150879,
+        "provenance": "measured"
+      },
+      "samples": {
+        "value": 20,
+        "provenance": "measured"
+      },
+      "escape_verified": {
+        "value": true,
+        "provenance": "derived"
+      }
+    },
+    {
+      "n": {
+        "value": 128,
+        "provenance": "specified"
+      },
+      "kernel": {
+        "value": "attention_pipeline",
+        "provenance": "specified"
+      },
+      "median_seconds": {
+        "value": 0.03574216365814209,
+        "provenance": "measured"
+      },
+      "samples": {
+        "value": 20,
+        "provenance": "measured"
+      },
+      "escape_verified": {
+        "value": true,
+        "provenance": "derived"
+      }
+    },
+    {
+      "n": {
+        "value": 128,
+        "provenance": "specified"
+      },
+      "kernel": {
+        "value": "goldilocks_subtract",
+        "provenance": "specified"
+      },
+      "median_seconds": {
+        "value": 0.038147926330566406,
+        "provenance": "measured"
+      },
+      "samples": {
+        "value": 20,
+        "provenance": "measured"
+      },
+      "escape_verified": {
+        "value": true,
+        "provenance": "derived"
+      }
+    },
+    {
+      "n": {
+        "value": 128,
+        "provenance": "specified"
+      },
+      "kernel": {
+        "value": "goldilocks_multiply",
+        "provenance": "specified"
+      },
+      "median_seconds": {
+        "value": 0.4009362459182739,
+        "provenance": "measured"
+      },
+      "samples": {
+        "value": 20,
+        "provenance": "measured"
+      },
+      "escape_verified": {
+        "value": true,
+        "provenance": "derived"
+      }
+    },
+    {
+      "n": {
+        "value": 1024,
+        "provenance": "specified"
+      },
+      "kernel": {
+        "value": "sum",
+        "provenance": "specified"
+      },
+      "median_seconds": {
+        "value": 0.005331873893737793,
+        "provenance": "measured"
+      },
+      "samples": {
+        "value": 20,
+        "provenance": "measured"
+      },
+      "escape_verified": {
+        "value": true,
+        "provenance": "derived"
+      }
+    },
+    {
+      "n": {
+        "value": 1024,
+        "provenance": "specified"
+      },
+      "kernel": {
+        "value": "product",
+        "provenance": "specified"
+      },
+      "median_seconds": {
+        "value": 3.4283427000045776,
+        "provenance": "measured"
+      },
+      "samples": {
+        "value": 20,
+        "provenance": "measured"
+      },
+      "escape_verified": {
+        "value": true,
+        "provenance": "derived"
+      }
+    },
+    {
+      "n": {
+        "value": 1024,
+        "provenance": "specified"
+      },
+      "kernel": {
+        "value": "min",
+        "provenance": "specified"
+      },
+      "median_seconds": {
+        "value": 0.013437032699584961,
+        "provenance": "measured"
+      },
+      "samples": {
+        "value": 20,
+        "provenance": "measured"
+      },
+      "escape_verified": {
+        "value": true,
+        "provenance": "derived"
+      }
+    },
+    {
+      "n": {
+        "value": 1024,
+        "provenance": "specified"
+      },
+      "kernel": {
+        "value": "max",
+        "provenance": "specified"
+      },
+      "median_seconds": {
+        "value": 0.008042097091674805,
+        "provenance": "measured"
+      },
+      "samples": {
+        "value": 20,
+        "provenance": "measured"
+      },
+      "escape_verified": {
+        "value": true,
+        "provenance": "derived"
+      }
+    },
+    {
+      "n": {
+        "value": 1024,
+        "provenance": "specified"
+      },
+      "kernel": {
+        "value": "scan",
+        "provenance": "specified"
+      },
+      "median_seconds": {
+        "value": 7.676143050193787,
+        "provenance": "measured"
+      },
+      "samples": {
+        "value": 20,
+        "provenance": "measured"
+      },
+      "escape_verified": {
+        "value": true,
+        "provenance": "derived"
+      }
+    },
+    {
+      "n": {
+        "value": 1024,
+        "provenance": "specified"
+      },
+      "kernel": {
+        "value": "tree_reduction",
+        "provenance": "specified"
+      },
+      "median_seconds": {
+        "value": 0.6947782039642334,
+        "provenance": "measured"
+      },
+      "samples": {
+        "value": 20,
+        "provenance": "measured"
+      },
+      "escape_verified": {
+        "value": true,
+        "provenance": "derived"
+      }
+    },
+    {
+      "n": {
+        "value": 1024,
+        "provenance": "specified"
+      },
+      "kernel": {
+        "value": "segmented_reduction",
+        "provenance": "specified"
+      },
+      "median_seconds": {
+        "value": 0.7128781080245972,
+        "provenance": "measured"
+      },
+      "samples": {
+        "value": 20,
+        "provenance": "measured"
+      },
+      "escape_verified": {
+        "value": true,
+        "provenance": "derived"
+      }
+    },
+    {
+      "n": {
+        "value": 1024,
+        "provenance": "specified"
+      },
+      "kernel": {
+        "value": "subleq_subtract",
+        "provenance": "specified"
+      },
+      "median_seconds": {
+        "value": 0.3733423948287964,
+        "provenance": "measured"
+      },
+      "samples": {
+        "value": 20,
+        "provenance": "measured"
+      },
+      "escape_verified": {
+        "value": true,
+        "provenance": "derived"
+      }
+    },
+    {
+      "n": {
+        "value": 1024,
+        "provenance": "specified"
+      },
+      "kernel": {
+        "value": "subleq_compare",
+        "provenance": "specified"
+      },
+      "median_seconds": {
+        "value": 0.02816033363342285,
+        "provenance": "measured"
+      },
+      "samples": {
+        "value": 20,
+        "provenance": "measured"
+      },
+      "escape_verified": {
+        "value": true,
+        "provenance": "derived"
+      }
+    },
+    {
+      "n": {
+        "value": 1024,
+        "provenance": "specified"
+      },
+      "kernel": {
+        "value": "subleq_route",
+        "provenance": "specified"
+      },
+      "median_seconds": {
+        "value": 0.007120966911315918,
+        "provenance": "measured"
+      },
+      "samples": {
+        "value": 20,
+        "provenance": "measured"
+      },
+      "escape_verified": {
+        "value": true,
+        "provenance": "derived"
+      }
+    },
+    {
+      "n": {
+        "value": 1024,
+        "provenance": "specified"
+      },
+      "kernel": {
+        "value": "subleq_reduce",
+        "provenance": "specified"
+      },
+      "median_seconds": {
+        "value": 0.0031772851943969727,
+        "provenance": "measured"
+      },
+      "samples": {
+        "value": 20,
+        "provenance": "measured"
+      },
+      "escape_verified": {
+        "value": true,
+        "provenance": "derived"
+      }
+    },
+    {
+      "n": {
+        "value": 1024,
+        "provenance": "specified"
+      },
+      "kernel": {
+        "value": "attention_pipeline",
+        "provenance": "specified"
+      },
+      "median_seconds": {
+        "value": 0.38738858699798584,
+        "provenance": "measured"
+      },
+      "samples": {
+        "value": 20,
+        "provenance": "measured"
+      },
+      "escape_verified": {
+        "value": true,
+        "provenance": "derived"
+      }
+    },
+    {
+      "n": {
+        "value": 1024,
+        "provenance": "specified"
+      },
+      "kernel": {
+        "value": "goldilocks_subtract",
+        "provenance": "specified"
+      },
+      "median_seconds": {
+        "value": 0.3462636470794678,
+        "provenance": "measured"
+      },
+      "samples": {
+        "value": 20,
+        "provenance": "measured"
+      },
+      "escape_verified": {
+        "value": true,
+        "provenance": "derived"
+      }
+    },
+    {
+      "n": {
+        "value": 1024,
+        "provenance": "specified"
+      },
+      "kernel": {
+        "value": "goldilocks_multiply",
+        "provenance": "specified"
+      },
+      "median_seconds": {
+        "value": 3.6531985998153687,
+        "provenance": "measured"
+      },
+      "samples": {
+        "value": 20,
+        "provenance": "measured"
+      },
+      "escape_verified": {
+        "value": true,
+        "provenance": "derived"
+      }
+    }
+  ]
+}
