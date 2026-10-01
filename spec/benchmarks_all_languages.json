@@ -1,0 +1,1867 @@
+{
+  "benchmarks": [
+    {
+      "attention_pipeline": [
+        {
+          "operation": "subleq_subtract",
+          "reduction_function": "subleq_subtract",
+          "reduction_shape": [
+            1
+          ],
+          "shape": [
+            1000,
+            1
+          ]
+        },
+        {
+          "operation": "subleq_compare",
+          "reduction_function": "subleq_compare",
+          "reduction_shape": [
+            1
+          ],
+          "shape": [
+            1000,
+            1
+          ]
+        },
+        {
+          "operation": "subleq_route",
+          "reduction_function": "subleq_route",
+          "reduction_shape": [
+            1
+          ],
+          "shape": [
+            1000,
+            1
+          ]
+        },
+        {
+          "operation": "subleq_reduce",
+          "reduction_function": "subleq_reduce",
+          "reduction_shape": [
+            1
+          ],
+          "shape": [
+            1000,
+            1
+          ]
+        }
+      ],
+      "goldilocks_arithmetic": [
+        {
+          "arithmetic_function": "subleq_subtract",
+          "operation": "subleq_subtract",
+          "reduction_shape": [
+            1
+          ],
+          "shape": [
+            1000,
+            1
+          ]
+        },
+        {
+          "arithmetic_function": "subleq_multiply",
+          "operation": "subleq_multiply",
+          "reduction_shape": [
+            1
+          ],
+          "shape": [
+            1000,
+            1
+          ]
+        }
+      ],
+      "goldilocks_values": [
+        2,
+        3,
+        4
+      ],
+      "input_shape": [
+        1000,
+        1000,
+        1
+      ],
+      "name": "Chapel",
+      "reduction_operations": [
+        {
+          "operation": "sum",
+          "reduction_function": "add",
+          "reduction_shape": [
+            1
+          ],
+          "shape": [
+            1000,
+            1
+          ]
+        },
+        {
+          "operation": "product",
+          "reduction_function": "multiply",
+          "reduction_shape": [
+            1
+          ],
+          "shape": [
+            1000,
+            1
+          ]
+        },
+        {
+          "operation": "min",
+          "reduction_function": "min",
+          "reduction_shape": [
+            1
+          ],
+          "shape": [
+            1000,
+            1
+          ]
+        },
+        {
+          "operation": "max",
+          "reduction_function": "max",
+          "reduction_shape": [
+            1
+          ],
+          "shape": [
+            1000,
+            1
+          ]
+        },
+        {
+          "operation": "scan",
+          "reduction_function": "add",
+          "reduction_shape": [
+            1
+          ],
+          "shape": [
+            1000,
+            1
+          ]
+        },
+        {
+          "operation": "tree_reduction",
+          "reduction_function": "tree_reduce",
+          "reduction_shape": [
+            1
+          ],
+          "shape": [
+            1000,
+            1
+          ]
+        },
+        {
+          "operation": "segmented_reduction",
+          "reduction_function": "segmented_reduce",
+          "reduction_shape": [
+            1
+          ],
+          "shape": [
+            1000,
+            1
+          ]
+        },
+        {
+          "operation": "subleq_subtract",
+          "reduction_function": "subleq_subtract",
+          "reduction_shape": [
+            1
+          ],
+          "shape": [
+            1000,
+            1
+          ]
+        },
+        {
+          "operation": "subleq_compare",
+          "reduction_function": "subleq_compare",
+          "reduction_shape": [
+            1
+          ],
+          "shape": [
+            1000,
+            1
+          ]
+        },
+        {
+          "operation": "subleq_route",
+          "reduction_function": "subleq_route",
+          "reduction_shape": [
+            1
+          ],
+          "shape": [
+            1000,
+            1
+          ]
+        },
+        {
+          "operation": "subleq_reduce",
+          "reduction_function": "subleq_reduce",
+          "reduction_shape": [
+            1
+          ],
+          "shape": [
+            1000,
+            1
+          ]
+        }
+      ],
+      "type": "array"
+    },
+    {
+      "attention_pipeline": [
+        {
+          "operation": "subleq_subtract",
+          "reduction_function": "subleq_subtract",
+          "reduction_shape": [
+            1
+          ],
+          "shape": [
+            1000,
+            1
+          ]
+        },
+        {
+          "operation": "subleq_compare",
+          "reduction_function": "subleq_compare",
+          "reduction_shape": [
+            1
+          ],
+          "shape": [
+            1000,
+            1
+          ]
+        },
+        {
+          "operation": "subleq_route",
+          "reduction_function": "subleq_route",
+          "reduction_shape": [
+            1
+          ],
+          "shape": [
+            1000,
+            1
+          ]
+        },
+        {
+          "operation": "subleq_reduce",
+          "reduction_function": "subleq_reduce",
+          "reduction_shape": [
+            1
+          ],
+          "shape": [
+            1000,
+            1
+          ]
+        }
+      ],
+      "goldilocks_arithmetic": [
+        {
+          "arithmetic_function": "subleq_subtract",
+          "operation": "subleq_subtract",
+          "reduction_shape": [
+            1
+          ],
+          "shape": [
+            1000,
+            1
+          ]
+        },
+        {
+          "arithmetic_function": "subleq_multiply",
+          "operation": "subleq_multiply",
+          "reduction_shape": [
+            1
+          ],
+          "shape": [
+            1000,
+            1
+          ]
+        }
+      ],
+      "goldilocks_values": [
+        2,
+        3,
+        4
+      ],
+      "input_shape": [
+        1000,
+        1000,
+        1
+      ],
+      "name": "Wolfram",
+      "reduction_operations": [
+        {
+          "operation": "sum",
+          "reduction_function": "add",
+          "reduction_shape": [
+            1
+          ],
+          "shape": [
+            1000,
+            1
+          ]
+        },
+        {
+          "operation": "product",
+          "reduction_function": "multiply",
+          "reduction_shape": [
+            1
+          ],
+          "shape": [
+            1000,
+            1
+          ]
+        },
+        {
+          "operation": "min",
+          "reduction_function": "min",
+          "reduction_shape": [
+            1
+          ],
+          "shape": [
+            1000,
+            1
+          ]
+        },
+        {
+          "operation": "max",
+          "reduction_function": "max",
+          "reduction_shape": [
+            1
+          ],
+          "shape": [
+            1000,
+            1
+          ]
+        },
+        {
+          "operation": "scan",
+          "reduction_function": "add",
+          "reduction_shape": [
+            1
+          ],
+          "shape": [
+            1000,
+            1
+          ]
+        },
+        {
+          "operation": "tree_reduction",
+          "reduction_function": "tree_reduce",
+          "reduction_shape": [
+            1
+          ],
+          "shape": [
+            1000,
+            1
+          ]
+        },
+        {
+          "operation": "segmented_reduction",
+          "reduction_function": "segmented_reduce",
+          "reduction_shape": [
+            1
+          ],
+          "shape": [
+            1000,
+            1
+          ]
+        },
+        {
+          "operation": "subleq_subtract",
+          "reduction_function": "subleq_subtract",
+          "reduction_shape": [
+            1
+          ],
+          "shape": [
+            1000,
+            1
+          ]
+        },
+        {
+          "operation": "subleq_compare",
+          "reduction_function": "subleq_compare",
+          "reduction_shape": [
+            1
+          ],
+          "shape": [
+            1000,
+            1
+          ]
+        },
+        {
+          "operation": "subleq_route",
+          "reduction_function": "subleq_route",
+          "reduction_shape": [
+            1
+          ],
+          "shape": [
+            1000,
+            1
+          ]
+        },
+        {
+          "operation": "subleq_reduce",
+          "reduction_function": "subleq_reduce",
+          "reduction_shape": [
+            1
+          ],
+          "shape": [
+            1000,
+            1
+          ]
+        }
+      ],
+      "type": "array"
+    },
+    {
+      "attention_pipeline": [
+        {
+          "operation": "subleq_subtract",
+          "reduction_function": "subleq_subtract",
+          "reduction_shape": [
+            1
+          ],
+          "shape": [
+            1000,
+            1
+          ]
+        },
+        {
+          "operation": "subleq_compare",
+          "reduction_function": "subleq_compare",
+          "reduction_shape": [
+            1
+          ],
+          "shape": [
+            1000,
+            1
+          ]
+        },
+        {
+          "operation": "subleq_route",
+          "reduction_function": "subleq_route",
+          "reduction_shape": [
+            1
+          ],
+          "shape": [
+            1000,
+            1
+          ]
+        },
+        {
+          "operation": "subleq_reduce",
+          "reduction_function": "subleq_reduce",
+          "reduction_shape": [
+            1
+          ],
+          "shape": [
+            1000,
+            1
+          ]
+        }
+      ],
+      "goldilocks_arithmetic": [
+        {
+          "arithmetic_function": "subleq_subtract",
+          "operation": "subleq_subtract",
+          "reduction_shape": [
+            1
+          ],
+          "shape": [
+            1000,
+            1
+          ]
+        },
+        {
+          "arithmetic_function": "subleq_multiply",
+          "operation": "subleq_multiply",
+          "reduction_shape": [
+            1
+          ],
+          "shape": [
+            1000,
+            1
+          ]
+        }
+      ],
+      "goldilocks_values": [
+        2,
+        3,
+        4
+      ],
+      "input_shape": [
+        1000,
+        1000,
+        1
+      ],
+      "name": "Remora",
+      "reduction_operations": [
+        {
+          "operation": "sum",
+          "reduction_function": "add",
+          "reduction_shape": [
+            1
+          ],
+          "shape": [
+            1000,
+            1
+          ]
+        },
+        {
+          "operation": "product",
+          "reduction_function": "multiply",
+          "reduction_shape": [
+            1
+          ],
+          "shape": [
+            1000,
+            1
+          ]
+        },
+        {
+          "operation": "min",
+          "reduction_function": "min",
+          "reduction_shape": [
+            1
+          ],
+          "shape": [
+            1000,
+            1
+          ]
+        },
+        {
+          "operation": "max",
+          "reduction_function": "max",
+          "reduction_shape": [
+            1
+          ],
+          "shape": [
+            1000,
+            1
+          ]
+        },
+        {
+          "operation": "scan",
+          "reduction_function": "add",
+          "reduction_shape": [
+            1
+          ],
+          "shape": [
+            1000,
+            1
+          ]
+        },
+        {
+          "operation": "tree_reduction",
+          "reduction_function": "tree_reduce",
+          "reduction_shape": [
+            1
+          ],
+          "shape": [
+            1000,
+            1
+          ]
+        },
+        {
+          "operation": "segmented_reduction",
+          "reduction_function": "segmented_reduce",
+          "reduction_shape": [
+            1
+          ],
+          "shape": [
+            1000,
+            1
+          ]
+        },
+        {
+          "operation": "subleq_subtract",
+          "reduction_function": "subleq_subtract",
+          "reduction_shape": [
+            1
+          ],
+          "shape": [
+            1000,
+            1
+          ]
+        },
+        {
+          "operation": "subleq_compare",
+          "reduction_function": "subleq_compare",
+          "reduction_shape": [
+            1
+          ],
+          "shape": [
+            1000,
+            1
+          ]
+        },
+        {
+          "operation": "subleq_route",
+          "reduction_function": "subleq_route",
+          "reduction_shape": [
+            1
+          ],
+          "shape": [
+            1000,
+            1
+          ]
+        },
+        {
+          "operation": "subleq_reduce",
+          "reduction_function": "subleq_reduce",
+          "reduction_shape": [
+            1
+          ],
+          "shape": [
+            1000,
+            1
+          ]
+        }
+      ],
+      "type": "array"
+    },
+    {
+      "attention_pipeline": [
+        {
+          "operation": "subleq_subtract",
+          "reduction_function": "subleq_subtract",
+          "reduction_shape": [
+            1
+          ],
+          "shape": [
+            1000,
+            1
+          ]
+        },
+        {
+          "operation": "subleq_compare",
+          "reduction_function": "subleq_compare",
+          "reduction_shape": [
+            1
+          ],
+          "shape": [
+            1000,
+            1
+          ]
+        },
+        {
+          "operation": "subleq_route",
+          "reduction_function": "subleq_route",
+          "reduction_shape": [
+            1
+          ],
+          "shape": [
+            1000,
+            1
+          ]
+        },
+        {
+          "operation": "subleq_reduce",
+          "reduction_function": "subleq_reduce",
+          "reduction_shape": [
+            1
+          ],
+          "shape": [
+            1000,
+            1
+          ]
+        }
+      ],
+      "goldilocks_arithmetic": [
+        {
+          "arithmetic_function": "subleq_subtract",
+          "operation": "subleq_subtract",
+          "reduction_shape": [
+            1
+          ],
+          "shape": [
+            1000,
+            1
+          ]
+        },
+        {
+          "arithmetic_function": "subleq_multiply",
+          "operation": "subleq_multiply",
+          "reduction_shape": [
+            1
+          ],
+          "shape": [
+            1000,
+            1
+          ]
+        }
+      ],
+      "goldilocks_values": [
+        2,
+        3,
+        4
+      ],
+      "input_shape": [
+        1000,
+        1000,
+        1
+      ],
+      "name": "SaC",
+      "reduction_operations": [
+        {
+          "operation": "sum",
+          "reduction_function": "add",
+          "reduction_shape": [
+            1
+          ],
+          "shape": [
+            1000,
+            1
+          ]
+        },
+        {
+          "operation": "product",
+          "reduction_function": "multiply",
+          "reduction_shape": [
+            1
+          ],
+          "shape": [
+            1000,
+            1
+          ]
+        },
+        {
+          "operation": "min",
+          "reduction_function": "min",
+          "reduction_shape": [
+            1
+          ],
+          "shape": [
+            1000,
+            1
+          ]
+        },
+        {
+          "operation": "max",
+          "reduction_function": "max",
+          "reduction_shape": [
+            1
+          ],
+          "shape": [
+            1000,
+            1
+          ]
+        },
+        {
+          "operation": "scan",
+          "reduction_function": "add",
+          "reduction_shape": [
+            1
+          ],
+          "shape": [
+            1000,
+            1
+          ]
+        },
+        {
+          "operation": "tree_reduction",
+          "reduction_function": "tree_reduce",
+          "reduction_shape": [
+            1
+          ],
+          "shape": [
+            1000,
+            1
+          ]
+        },
+        {
+          "operation": "segmented_reduction",
+          "reduction_function": "segmented_reduce",
+          "reduction_shape": [
+            1
+          ],
+          "shape": [
+            1000,
+            1
+          ]
+        },
+        {
+          "operation": "subleq_subtract",
+          "reduction_function": "subleq_subtract",
+          "reduction_shape": [
+            1
+          ],
+          "shape": [
+            1000,
+            1
+          ]
+        },
+        {
+          "operation": "subleq_compare",
+          "reduction_function": "subleq_compare",
+          "reduction_shape": [
+            1
+          ],
+          "shape": [
+            1000,
+            1
+          ]
+        },
+        {
+          "operation": "subleq_route",
+          "reduction_function": "subleq_route",
+          "reduction_shape": [
+            1
+          ],
+          "shape": [
+            1000,
+            1
+          ]
+        },
+        {
+          "operation": "subleq_reduce",
+          "reduction_function": "subleq_reduce",
+          "reduction_shape": [
+            1
+          ],
+          "shape": [
+            1000,
+            1
+          ]
+        }
+      ],
+      "type": "array"
+    },
+    {
+      "attention_pipeline": [
+        {
+          "operation": "subleq_subtract",
+          "reduction_function": "subleq_subtract",
+          "reduction_shape": [
+            1
+          ],
+          "shape": [
+            1000,
+            1
+          ]
+        },
+        {
+          "operation": "subleq_compare",
+          "reduction_function": "subleq_compare",
+          "reduction_shape": [
+            1
+          ],
+          "shape": [
+            1000,
+            1
+          ]
+        },
+        {
+          "operation": "subleq_route",
+          "reduction_function": "subleq_route",
+          "reduction_shape": [
+            1
+          ],
+          "shape": [
+            1000,
+            1
+          ]
+        },
+        {
+          "operation": "subleq_reduce",
+          "reduction_function": "subleq_reduce",
+          "reduction_shape": [
+            1
+          ],
+          "shape": [
+            1000,
+            1
+          ]
+        }
+      ],
+      "goldilocks_arithmetic": [
+        {
+          "arithmetic_function": "subleq_subtract",
+          "operation": "subleq_subtract",
+          "reduction_shape": [
+            1
+          ],
+          "shape": [
+            1000,
+            1
+          ]
+        },
+        {
+          "arithmetic_function": "subleq_multiply",
+          "operation": "subleq_multiply",
+          "reduction_shape": [
+            1
+          ],
+          "shape": [
+            1000,
+            1
+          ]
+        }
+      ],
+      "goldilocks_values": [
+        2,
+        3,
+        4
+      ],
+      "input_shape": [
+        1000,
+        1000,
+        1
+      ],
+      "name": "Singeli",
+      "reduction_operations": [
+        {
+          "operation": "sum",
+          "reduction_function": "add",
+          "reduction_shape": [
+            1
+          ],
+          "shape": [
+            1000,
+            1
+          ]
+        },
+        {
+          "operation": "product",
+          "reduction_function": "multiply",
+          "reduction_shape": [
+            1
+          ],
+          "shape": [
+            1000,
+            1
+          ]
+        },
+        {
+          "operation": "min",
+          "reduction_function": "min",
+          "reduction_shape": [
+            1
+          ],
+          "shape": [
+            1000,
+            1
+          ]
+        },
+        {
+          "operation": "max",
+          "reduction_function": "max",
+          "reduction_shape": [
+            1
+          ],
+          "shape": [
+            1000,
+            1
+          ]
+        },
+        {
+          "operation": "scan",
+          "reduction_function": "add",
+          "reduction_shape": [
+            1
+          ],
+          "shape": [
+            1000,
+            1
+          ]
+        },
+        {
+          "operation": "tree_reduction",
+          "reduction_function": "tree_reduce",
+          "reduction_shape": [
+            1
+          ],
+          "shape": [
+            1000,
+            1
+          ]
+        },
+        {
+          "operation": "segmented_reduction",
+          "reduction_function": "segmented_reduce",
+          "reduction_shape": [
+            1
+          ],
+          "shape": [
+            1000,
+            1
+          ]
+        },
+        {
+          "operation": "subleq_subtract",
+          "reduction_function": "subleq_subtract",
+          "reduction_shape": [
+            1
+          ],
+          "shape": [
+            1000,
+            1
+          ]
+        },
+        {
+          "operation": "subleq_compare",
+          "reduction_function": "subleq_compare",
+          "reduction_shape": [
+            1
+          ],
+          "shape": [
+            1000,
+            1
+          ]
+        },
+        {
+          "operation": "subleq_route",
+          "reduction_function": "subleq_route",
+          "reduction_shape": [
+            1
+          ],
+          "shape": [
+            1000,
+            1
+          ]
+        },
+        {
+          "operation": "subleq_reduce",
+          "reduction_function": "subleq_reduce",
+          "reduction_shape": [
+            1
+          ],
+          "shape": [
+            1000,
+            1
+          ]
+        }
+      ],
+      "type": "array"
+    },
+    {
+      "attention_pipeline": [
+        {
+          "operation": "subleq_subtract",
+          "reduction_function": "subleq_subtract",
+          "reduction_shape": [
+            1
+          ],
+          "shape": [
+            1000,
+            1
+          ]
+        },
+        {
+          "operation": "subleq_compare",
+          "reduction_function": "subleq_compare",
+          "reduction_shape": [
+            1
+          ],
+          "shape": [
+            1000,
+            1
+          ]
+        },
+        {
+          "operation": "subleq_route",
+          "reduction_function": "subleq_route",
+          "reduction_shape": [
+            1
+          ],
+          "shape": [
+            1000,
+            1
+          ]
+        },
+        {
+          "operation": "subleq_reduce",
+          "reduction_function": "subleq_reduce",
+          "reduction_shape": [
+            1
+          ],
+          "shape": [
+            1000,
+            1
+          ]
+        }
+      ],
+      "goldilocks_arithmetic": [
+        {
+          "arithmetic_function": "subleq_subtract",
+          "operation": "subleq_subtract",
+          "reduction_shape": [
+            1
+          ],
+          "shape": [
+            1000,
+            1
+          ]
+        },
+        {
+          "arithmetic_function": "subleq_multiply",
+          "operation": "subleq_multiply",
+          "reduction_shape": [
+            1
+          ],
+          "shape": [
+            1000,
+            1
+          ]
+        }
+      ],
+      "goldilocks_values": [
+        2,
+        3,
+        4
+      ],
+      "input_shape": [
+        1000,
+        1000,
+        1
+      ],
+      "name": "TinyAPL",
+      "reduction_operations": [
+        {
+          "operation": "sum",
+          "reduction_function": "add",
+          "reduction_shape": [
+            1
+          ],
+          "shape": [
+            1000,
+            1
+          ]
+        },
+        {
+          "operation": "product",
+          "reduction_function": "multiply",
+          "reduction_shape": [
+            1
+          ],
+          "shape": [
+            1000,
+            1
+          ]
+        },
+        {
+          "operation": "min",
+          "reduction_function": "min",
+          "reduction_shape": [
+            1
+          ],
+          "shape": [
+            1000,
+            1
+          ]
+        },
+        {
+          "operation": "max",
+          "reduction_function": "max",
+          "reduction_shape": [
+            1
+          ],
+          "shape": [
+            1000,
+            1
+          ]
+        },
+        {
+          "operation": "scan",
+          "reduction_function": "add",
+          "reduction_shape": [
+            1
+          ],
+          "shape": [
+            1000,
+            1
+          ]
+        },
+        {
+          "operation": "tree_reduction",
+          "reduction_function": "tree_reduce",
+          "reduction_shape": [
+            1
+          ],
+          "shape": [
+            1000,
+            1
+          ]
+        },
+        {
+          "operation": "segmented_reduction",
+          "reduction_function": "segmented_reduce",
+          "reduction_shape": [
+            1
+          ],
+          "shape": [
+            1000,
+            1
+          ]
+        },
+        {
+          "operation": "subleq_subtract",
+          "reduction_function": "subleq_subtract",
+          "reduction_shape": [
+            1
+          ],
+          "shape": [
+            1000,
+            1
+          ]
+        },
+        {
+          "operation": "subleq_compare",
+          "reduction_function": "subleq_compare",
+          "reduction_shape": [
+            1
+          ],
+          "shape": [
+            1000,
+            1
+          ]
+        },
+        {
+          "operation": "subleq_route",
+          "reduction_function": "subleq_route",
+          "reduction_shape": [
+            1
+          ],
+          "shape": [
+            1000,
+            1
+          ]
+        },
+        {
+          "operation": "subleq_reduce",
+          "reduction_function": "subleq_reduce",
+          "reduction_shape": [
+            1
+          ],
+          "shape": [
+            1000,
+            1
+          ]
+        }
+      ],
+      "type": "array"
+    },
+    {
+      "attention_pipeline": [
+        {
+          "operation": "subleq_subtract",
+          "reduction_function": "subleq_subtract",
+          "reduction_shape": [
+            1
+          ],
+          "shape": [
+            1000,
+            1
+          ]
+        },
+        {
+          "operation": "subleq_compare",
+          "reduction_function": "subleq_compare",
+          "reduction_shape": [
+            1
+          ],
+          "shape": [
+            1000,
+            1
+          ]
+        },
+        {
+          "operation": "subleq_route",
+          "reduction_function": "subleq_route",
+          "reduction_shape": [
+            1
+          ],
+          "shape": [
+            1000,
+            1
+          ]
+        },
+        {
+          "operation": "subleq_reduce",
+          "reduction_function": "subleq_reduce",
+          "reduction_shape": [
+            1
+          ],
+          "shape": [
+            1000,
+            1
+          ]
+        }
+      ],
+      "goldilocks_arithmetic": [
+        {
+          "arithmetic_function": "subleq_subtract",
+          "operation": "subleq_subtract",
+          "reduction_shape": [
+            1
+          ],
+          "shape": [
+            1000,
+            1
+          ]
+        },
+        {
+          "arithmetic_function": "subleq_multiply",
+          "operation": "subleq_multiply",
+          "reduction_shape": [
+            1
+          ],
+          "shape": [
+            1000,
+            1
+          ]
+        }
+      ],
+      "goldilocks_values": [
+        2,
+        3,
+        4
+      ],
+      "input_shape": [
+        1000,
+        1000,
+        1
+      ],
+      "name": "April",
+      "reduction_operations": [
+        {
+          "operation": "sum",
+          "reduction_function": "add",
+          "reduction_shape": [
+            1
+          ],
+          "shape": [
+            1000,
+            1
+          ]
+        },
+        {
+          "operation": "product",
+          "reduction_function": "multiply",
+          "reduction_shape": [
+            1
+          ],
+          "shape": [
+            1000,
+            1
+          ]
+        },
+        {
+          "operation": "min",
+          "reduction_function": "min",
+          "reduction_shape": [
+            1
+          ],
+          "shape": [
+            1000,
+            1
+          ]
+        },
+        {
+          "operation": "max",
+          "reduction_function": "max",
+          "reduction_shape": [
+            1
+          ],
+          "shape": [
+            1000,
+            1
+          ]
+        },
+        {
+          "operation": "scan",
+          "reduction_function": "add",
+          "reduction_shape": [
+            1
+          ],
+          "shape": [
+            1000,
+            1
+          ]
+        },
+        {
+          "operation": "tree_reduction",
+          "reduction_function": "tree_reduce",
+          "reduction_shape": [
+            1
+          ],
+          "shape": [
+            1000,
+            1
+          ]
+        },
+        {
+          "operation": "segmented_reduction",
+          "reduction_function": "segmented_reduce",
+          "reduction_shape": [
+            1
+          ],
+          "shape": [
+            1000,
+            1
+          ]
+        },
+        {
+          "operation": "subleq_subtract",
+          "reduction_function": "subleq_subtract",
+          "reduction_shape": [
+            1
+          ],
+          "shape": [
+            1000,
+            1
+          ]
+        },
+        {
+          "operation": "subleq_compare",
+          "reduction_function": "subleq_compare",
+          "reduction_shape": [
+            1
+          ],
+          "shape": [
+            1000,
+            1
+          ]
+        },
+        {
+          "operation": "subleq_route",
+          "reduction_function": "subleq_route",
+          "reduction_shape": [
+            1
+          ],
+          "shape": [
+            1000,
+            1
+          ]
+        },
+        {
+          "operation": "subleq_reduce",
+          "reduction_function": "subleq_reduce",
+          "reduction_shape": [
+            1
+          ],
+          "shape": [
+            1000,
+            1
+          ]
+        }
+      ],
+      "type": "array"
+    },
+    {
+      "attention_pipeline": [
+        {
+          "operation": "subleq_subtract",
+          "reduction_function": "subleq_subtract",
+          "reduction_shape": [
+            1
+          ],
+          "shape": [
+            1000,
+            1
+          ]
+        },
+        {
+          "operation": "subleq_compare",
+          "reduction_function": "subleq_compare",
+          "reduction_shape": [
+            1
+          ],
+          "shape": [
+            1000,
+            1
+          ]
+        },
+        {
+          "operation": "subleq_route",
+          "reduction_function": "subleq_route",
+          "reduction_shape": [
+            1
+          ],
+          "shape": [
+            1000,
+            1
+          ]
+        },
+        {
+          "operation": "subleq_reduce",
+          "reduction_function": "subleq_reduce",
+          "reduction_shape": [
+            1
+          ],
+          "shape": [
+            1000,
+            1
+          ]
+        }
+      ],
+      "goldilocks_arithmetic": [
+        {
+          "arithmetic_function": "subleq_subtract",
+          "operation": "subleq_subtract",
+          "reduction_shape": [
+            1
+          ],
+          "shape": [
+            1000,
+            1
+          ]
+        },
+        {
+          "arithmetic_function": "subleq_multiply",
+          "operation": "subleq_multiply",
+          "reduction_shape": [
+            1
+          ],
+          "shape": [
+            1000,
+            1
+          ]
+        }
+      ],
+      "goldilocks_values": [
+        2,
+        3,
+        4
+      ],
+      "input_shape": [
+        1000,
+        1000,
+        1
+      ],
+      "name": "Nial",
+      "reduction_operations": [
+        {
+          "operation": "sum",
+          "reduction_function": "add",
+          "reduction_shape": [
+            1
+          ],
+          "shape": [
+            1000,
+            1
+          ]
+        },
+        {
+          "operation": "product",
+          "reduction_function": "multiply",
+          "reduction_shape": [
+            1
+          ],
+          "shape": [
+            1000,
+            1
+          ]
+        },
+        {
+          "operation": "min",
+          "reduction_function": "min",
+          "reduction_shape": [
+            1
+          ],
+          "shape": [
+            1000,
+            1
+          ]
+        },
+        {
+          "operation": "max",
+          "reduction_function": "max",
+          "reduction_shape": [
+            1
+          ],
+          "shape": [
+            1000,
+            1
+          ]
+        },
+        {
+          "operation": "scan",
+          "reduction_function": "add",
+          "reduction_shape": [
+            1
+          ],
+          "shape": [
+            1000,
+            1
+          ]
+        },
+        {
+          "operation": "tree_reduction",
+          "reduction_function": "tree_reduce",
+          "reduction_shape": [
+            1
+          ],
+          "shape": [
+            1000,
+            1
+          ]
+        },
+        {
+          "operation": "segmented_reduction",
+          "reduction_function": "segmented_reduce",
+          "reduction_shape": [
+            1
+          ],
+          "shape": [
+            1000,
+            1
+          ]
+        },
+        {
+          "operation": "subleq_subtract",
+          "reduction_function": "subleq_subtract",
+          "reduction_shape": [
+            1
+          ],
+          "shape": [
+            1000,
+            1
+          ]
+        },
+        {
+          "operation": "subleq_compare",
+          "reduction_function": "subleq_compare",
+          "reduction_shape": [
+            1
+          ],
+          "shape": [
+            1000,
+            1
+          ]
+        },
+        {
+          "operation": "subleq_route",
+          "reduction_function": "subleq_route",
+          "reduction_shape": [
+            1
+          ],
+          "shape": [
+            1000,
+            1
+          ]
+        },
+        {
+          "operation": "subleq_reduce",
+          "reduction_function": "subleq_reduce",
+          "reduction_shape": [
+            1
+          ],
+          "shape": [
+            1000,
+            1
+          ]
+        }
+      ],
+      "type": "array"
+    },
+    {
+      "attention_pipeline": [
+        {
+          "operation": "subleq_subtract",
+          "reduction_function": "subleq_subtract",
+          "reduction_shape": [
+            1
+          ],
+          "shape": [
+            1000,
+            1
+          ]
+        },
+        {
+          "operation": "subleq_compare",
+          "reduction_function": "subleq_compare",
+          "reduction_shape": [
+            1
+          ],
+          "shape": [
+            1000,
+            1
+          ]
+        },
+        {
+          "operation": "subleq_route",
+          "reduction_function": "subleq_route",
+          "reduction_shape": [
+            1
+          ],
+          "shape": [
+            1000,
+            1
+          ]
+        },
+        {
+          "operation": "subleq_reduce",
+          "reduction_function": "subleq_reduce",
+          "reduction_shape": [
+            1
+          ],
+          "shape": [
+            1000,
+            1
+          ]
+        }
+      ],
+      "goldilocks_arithmetic": [
+        {
+          "arithmetic_function": "subleq_subtract",
+          "operation": "subleq_subtract",
+          "reduction_shape": [
+            1
+          ],
+          "shape": [
+            1000,
+            1
+          ]
+        },
+        {
+          "arithmetic_function": "subleq_multiply",
+          "operation": "subleq_multiply",
+          "reduction_shape": [
+            1
+          ],
+          "shape": [
+            1000,
+            1
+          ]
+        }
+      ],
+      "goldilocks_values": [
+        2,
+        3,
+        4
+      ],
+      "input_shape": [
+        1000,
+        1000,
+        1
+      ],
+      "name": "Klong",
+      "reduction_operations": [
+        {
+          "operation": "sum",
+          "reduction_function": "add",
+          "reduction_shape": [
+            1
+          ],
+          "shape": [
+            1000,
+            1
+          ]
+        },
+        {
+          "operation": "product",
+          "reduction_function": "multiply",
+          "reduction_shape": [
+            1
+          ],
+          "shape": [
+            1000,
+            1
+          ]
+        },
+        {
+          "operation": "min",
+          "reduction_function": "min",
+          "reduction_shape": [
+            1
+          ],
+          "shape": [
+            1000,
+            1
+          ]
+        },
+        {
+          "operation": "max",
+          "reduction_function": "max",
+          "reduction_shape": [
+            1
+          ],
+          "shape": [
+            1000,
+            1
+          ]
+        },
+        {
+          "operation": "scan",
+          "reduction_function": "add",
+          "reduction_shape": [
+            1
+          ],
+          "shape": [
+            1000,
+            1
+          ]
+        },
+        {
+          "operation": "tree_reduction",
+          "reduction_function": "tree_reduce",
+          "reduction_shape": [
+            1
+          ],
+          "shape": [
+            1000,
+            1
+          ]
+        },
+        {
+          "operation": "segmented_reduction",
+          "reduction_function": "segmented_reduce",
+          "reduction_shape": [
+            1
+          ],
+          "shape": [
+            1000,
+            1
+          ]
+        },
+        {
+          "operation": "subleq_subtract",
+          "reduction_function": "subleq_subtract",
+          "reduction_shape": [
+            1
+          ],
+          "shape": [
+            1000,
+            1
+          ]
+        },
+        {
+          "operation": "subleq_compare",
+          "reduction_function": "subleq_compare",
+          "reduction_shape": [
+            1
+          ],
+          "shape": [
+            1000,
+            1
+          ]
+        },
+        {
+          "operation": "subleq_route",
+          "reduction_function": "subleq_route",
+          "reduction_shape": [
+            1
+          ],
+          "shape": [
+            1000,
+            1
+          ]
+        },
+        {
+          "operation": "subleq_reduce",
+          "reduction_function": "subleq_reduce",
+          "reduction_shape": [
+            1
+          ],
+          "shape": [
+            1000,
+            1
+          ]
+        }
+      ],
+      "type": "array"
+    }
+  ]
+}
