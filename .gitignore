@@ -2,3 +2,5 @@ chapel/exp01/exp01
 __pycache__/
 .pytest_cache/
 *.pyc
+c-reference/rarbench
+c-reference/test

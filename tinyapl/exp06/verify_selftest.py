@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# SPDX-License-Identifier: AGPL-3.0-or-later
+# Copyright (C) 2026 SnapKitty Collective
 """Verify TinyAPL self-test output against substrate Python oracle."""
 import subprocess, sys
 
