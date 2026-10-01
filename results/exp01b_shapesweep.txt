@@ -1,0 +1,30 @@
+CHECKSUM crosslang_checksum 1388262917130611548 first8 6041607748924030458 8399375536991227553 4798406006966217198 3945398436693386753 7153005042069752150 16856140692465304082 15770424917740816755 11372436664227433461
+== [N] sweep: gf-sum, all topologies ==
+N=  128  seq_med=0  tree_med=18000  chunk_med=1000  fused_med=3000  ns/elem_seq=0
+M1D n=128 seq=0 tree=18000 chunked=1000 fused=3000
+N=  256  seq_med=1000  tree_med=21000  chunk_med=2000  fused_med=3000  ns/elem_seq=3.90625
+M1D n=256 seq=1000 tree=21000 chunked=2000 fused=3000
+N=  512  seq_med=2000  tree_med=25000  chunk_med=3000  fused_med=3000  ns/elem_seq=3.90625
+M1D n=512 seq=2000 tree=25000 chunked=3000 fused=3000
+N= 1024  seq_med=4000  tree_med=34000  chunk_med=5000  fused_med=4000  ns/elem_seq=3.90625
+M1D n=1024 seq=4000 tree=34000 chunked=5000 fused=4000
+N= 2048  seq_med=8000  tree_med=36000  chunk_med=9000  fused_med=8000  ns/elem_seq=3.90625
+M1D n=2048 seq=8000 tree=36000 chunked=9000 fused=8000
+N= 4096  seq_med=22000  tree_med=55000  chunk_med=28000  fused_med=13000  ns/elem_seq=5.37109
+M1D n=4096 seq=22000 tree=55000 chunked=28000 fused=13000
+N= 8192  seq_med=60000  tree_med=91000  chunk_med=30000  fused_med=34000  ns/elem_seq=7.32422
+M1D n=8192 seq=60000 tree=91000 chunked=30000 fused=34000
+== [B,N,D] SUBLEQ sweep: mul vs reduce dominance test ==
+B=1 N=  128 D= 64  mul_med=6.562e+06  routed_med=1.55e+05  ratio=42.34  taken=4123/8192  impl_gfAdds=777971
+MSUB b=1 n=128 d=64 total=8192 mul=6.562e+06 routed=1.55e+05 ratio=42.3355 taken=4123 impl_gfAdds=777971
+B=1 N=  512 D= 64  mul_med=2.3096e+07  routed_med=8.36e+05  ratio=27.63  taken=16348/32768  impl_gfAdds=3113633
+MSUB b=1 n=512 d=64 total=32768 mul=2.3096e+07 routed=8.36e+05 ratio=27.6268 taken=16348 impl_gfAdds=3113633
+B=1 N= 2048 D= 64  mul_med=1.39045e+08  routed_med=2.753e+06  ratio=50.51  taken=65357/131072  impl_gfAdds=12454691
+MSUB b=1 n=2048 d=64 total=131072 mul=1.39045e+08 routed=2.753e+06 ratio=50.5067 taken=65357 impl_gfAdds=12454691
+B=1 N= 8192 D= 64  mul_med=5.12219e+08  routed_med=1.1291e+07  ratio=45.37  taken=262383/524288  impl_gfAdds=49815152
+MSUB b=1 n=8192 d=64 total=524288 mul=5.12219e+08 routed=1.1291e+07 ratio=45.3652 taken=262383 impl_gfAdds=49815152
+B=2 N= 1024 D=128  mul_med=2.59944e+08  routed_med=5.739e+06  ratio=45.29  taken=131176/262144  impl_gfAdds=24908387
+MSUB b=2 n=1024 d=128 total=262144 mul=2.59944e+08 routed=5.739e+06 ratio=45.2943 taken=131176 impl_gfAdds=24908387
+B=4 N= 1024 D=256  mul_med=1.03091e+09  routed_med=2.2748e+07  ratio=45.32  taken=523644/1048576  impl_gfAdds=99622952
+MSUB b=4 n=1024 d=256 total=1048576 mul=1.03091e+09 routed=2.2748e+07 ratio=45.3189 taken=523644 impl_gfAdds=99622952
+escape_checksum 15367083296587720943

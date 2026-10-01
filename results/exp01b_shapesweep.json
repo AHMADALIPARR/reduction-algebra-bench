@@ -1,0 +1,504 @@
+{
+  "schema": "reduction-algebra-bench/exp01b/1",
+  "experiment": "exp01b_shapesweep",
+  "kernels": {
+    "source": {
+      "value": "chapel/exp01/goldilocks_kernels.chpl",
+      "provenance": "specified"
+    },
+    "wiring": {
+      "value": "imported verbatim via `use GoldilocksKernels`; no field arithmetic defined or edited in shapesweep.chpl",
+      "provenance": "specified"
+    }
+  },
+  "prng": {
+    "algorithm": {
+      "value": "SplitMix64",
+      "provenance": "specified"
+    },
+    "seed": {
+      "value": "0x00BEEFCAFE",
+      "provenance": "specified"
+    },
+    "crosslang_checksum": {
+      "value": 1388262917130611548,
+      "provenance": "measured",
+      "cross_validated_bit_for_bit": {
+        "value": true,
+        "provenance": "derived"
+      }
+    }
+  },
+  "timing_protocol": {
+    "warmup": {
+      "value": 3,
+      "provenance": "specified"
+    },
+    "samples": {
+      "value": 20,
+      "provenance": "specified"
+    },
+    "aggregation": {
+      "value": "median",
+      "provenance": "specified"
+    },
+    "note": {
+      "value": "Exp 01 used mean-of-5; protocols are not interchangeable, each timing tagged",
+      "provenance": "specified"
+    }
+  },
+  "environment": {
+    "chpl_version": {
+      "value": "2.10.0",
+      "provenance": "measured"
+    },
+    "locale": {
+      "value": "single-locale",
+      "provenance": "specified"
+    }
+  },
+  "sweep_1d_topology": [
+    {
+      "n": 128,
+      "seq_ns": {
+        "value": 0.0,
+        "provenance": "measured"
+      },
+      "tree_ns": {
+        "value": 18000.0,
+        "provenance": "measured"
+      },
+      "chunked_ns": {
+        "value": 1000.0,
+        "provenance": "measured"
+      },
+      "fused_ns": {
+        "value": 3000.0,
+        "provenance": "measured"
+      },
+      "verified_against_seq": {
+        "value": true,
+        "provenance": "measured"
+      }
+    },
+    {
+      "n": 256,
+      "seq_ns": {
+        "value": 1000.0,
+        "provenance": "measured"
+      },
+      "tree_ns": {
+        "value": 21000.0,
+        "provenance": "measured"
+      },
+      "chunked_ns": {
+        "value": 2000.0,
+        "provenance": "measured"
+      },
+      "fused_ns": {
+        "value": 3000.0,
+        "provenance": "measured"
+      },
+      "verified_against_seq": {
+        "value": true,
+        "provenance": "measured"
+      }
+    },
+    {
+      "n": 512,
+      "seq_ns": {
+        "value": 2000.0,
+        "provenance": "measured"
+      },
+      "tree_ns": {
+        "value": 25000.0,
+        "provenance": "measured"
+      },
+      "chunked_ns": {
+        "value": 3000.0,
+        "provenance": "measured"
+      },
+      "fused_ns": {
+        "value": 3000.0,
+        "provenance": "measured"
+      },
+      "verified_against_seq": {
+        "value": true,
+        "provenance": "measured"
+      }
+    },
+    {
+      "n": 1024,
+      "seq_ns": {
+        "value": 4000.0,
+        "provenance": "measured"
+      },
+      "tree_ns": {
+        "value": 34000.0,
+        "provenance": "measured"
+      },
+      "chunked_ns": {
+        "value": 5000.0,
+        "provenance": "measured"
+      },
+      "fused_ns": {
+        "value": 4000.0,
+        "provenance": "measured"
+      },
+      "verified_against_seq": {
+        "value": true,
+        "provenance": "measured"
+      }
+    },
+    {
+      "n": 2048,
+      "seq_ns": {
+        "value": 8000.0,
+        "provenance": "measured"
+      },
+      "tree_ns": {
+        "value": 36000.0,
+        "provenance": "measured"
+      },
+      "chunked_ns": {
+        "value": 9000.0,
+        "provenance": "measured"
+      },
+      "fused_ns": {
+        "value": 8000.0,
+        "provenance": "measured"
+      },
+      "verified_against_seq": {
+        "value": true,
+        "provenance": "measured"
+      }
+    },
+    {
+      "n": 4096,
+      "seq_ns": {
+        "value": 22000.0,
+        "provenance": "measured"
+      },
+      "tree_ns": {
+        "value": 55000.0,
+        "provenance": "measured"
+      },
+      "chunked_ns": {
+        "value": 28000.0,
+        "provenance": "measured"
+      },
+      "fused_ns": {
+        "value": 13000.0,
+        "provenance": "measured"
+      },
+      "verified_against_seq": {
+        "value": true,
+        "provenance": "measured"
+      }
+    },
+    {
+      "n": 8192,
+      "seq_ns": {
+        "value": 60000.0,
+        "provenance": "measured"
+      },
+      "tree_ns": {
+        "value": 91000.0,
+        "provenance": "measured"
+      },
+      "chunked_ns": {
+        "value": 30000.0,
+        "provenance": "measured"
+      },
+      "fused_ns": {
+        "value": 34000.0,
+        "provenance": "measured"
+      },
+      "verified_against_seq": {
+        "value": true,
+        "provenance": "measured"
+      }
+    }
+  ],
+  "sweep_subleq_dominance": [
+    {
+      "b": 1,
+      "n": 128,
+      "d": 64,
+      "total": 8192,
+      "mul_ns": {
+        "value": 6562000.0,
+        "provenance": "measured"
+      },
+      "routed_ns": {
+        "value": 155000.0,
+        "provenance": "measured"
+      },
+      "mul_over_routed": {
+        "value": 42.3355,
+        "provenance": "derived"
+      },
+      "taken_branches": {
+        "value": 4123,
+        "provenance": "measured"
+      },
+      "algebraic_ops": {
+        "value": 8192,
+        "provenance": "specified",
+        "note": "n elementwise gfMuls timed; n subs + n predicates + taken gfAdds in routed"
+      },
+      "implementation_gfAdds": {
+        "value": 777971,
+        "provenance": "measured",
+        "cross_checked": {
+          "value": true,
+          "provenance": "derived"
+        }
+      }
+    },
+    {
+      "b": 1,
+      "n": 512,
+      "d": 64,
+      "total": 32768,
+      "mul_ns": {
+        "value": 23096000.0,
+        "provenance": "measured"
+      },
+      "routed_ns": {
+        "value": 836000.0,
+        "provenance": "measured"
+      },
+      "mul_over_routed": {
+        "value": 27.6268,
+        "provenance": "derived"
+      },
+      "taken_branches": {
+        "value": 16348,
+        "provenance": "measured"
+      },
+      "algebraic_ops": {
+        "value": 32768,
+        "provenance": "specified",
+        "note": "n elementwise gfMuls timed; n subs + n predicates + taken gfAdds in routed"
+      },
+      "implementation_gfAdds": {
+        "value": 3113633,
+        "provenance": "measured",
+        "cross_checked": {
+          "value": true,
+          "provenance": "derived"
+        }
+      }
+    },
+    {
+      "b": 1,
+      "n": 2048,
+      "d": 64,
+      "total": 131072,
+      "mul_ns": {
+        "value": 139045000.0,
+        "provenance": "measured"
+      },
+      "routed_ns": {
+        "value": 2753000.0,
+        "provenance": "measured"
+      },
+      "mul_over_routed": {
+        "value": 50.5067,
+        "provenance": "derived"
+      },
+      "taken_branches": {
+        "value": 65357,
+        "provenance": "measured"
+      },
+      "algebraic_ops": {
+        "value": 131072,
+        "provenance": "specified",
+        "note": "n elementwise gfMuls timed; n subs + n predicates + taken gfAdds in routed"
+      },
+      "implementation_gfAdds": {
+        "value": 12454691,
+        "provenance": "measured",
+        "cross_checked": {
+          "value": true,
+          "provenance": "derived"
+        }
+      }
+    },
+    {
+      "b": 1,
+      "n": 8192,
+      "d": 64,
+      "total": 524288,
+      "mul_ns": {
+        "value": 512219000.0,
+        "provenance": "measured"
+      },
+      "routed_ns": {
+        "value": 11291000.0,
+        "provenance": "measured"
+      },
+      "mul_over_routed": {
+        "value": 45.3652,
+        "provenance": "derived"
+      },
+      "taken_branches": {
+        "value": 262383,
+        "provenance": "measured"
+      },
+      "algebraic_ops": {
+        "value": 524288,
+        "provenance": "specified",
+        "note": "n elementwise gfMuls timed; n subs + n predicates + taken gfAdds in routed"
+      },
+      "implementation_gfAdds": {
+        "value": 49815152,
+        "provenance": "measured",
+        "cross_checked": {
+          "value": true,
+          "provenance": "derived"
+        }
+      }
+    },
+    {
+      "b": 2,
+      "n": 1024,
+      "d": 128,
+      "total": 262144,
+      "mul_ns": {
+        "value": 259944000.0,
+        "provenance": "measured"
+      },
+      "routed_ns": {
+        "value": 5739000.0,
+        "provenance": "measured"
+      },
+      "mul_over_routed": {
+        "value": 45.2943,
+        "provenance": "derived"
+      },
+      "taken_branches": {
+        "value": 131176,
+        "provenance": "measured"
+      },
+      "algebraic_ops": {
+        "value": 262144,
+        "provenance": "specified",
+        "note": "n elementwise gfMuls timed; n subs + n predicates + taken gfAdds in routed"
+      },
+      "implementation_gfAdds": {
+        "value": 24908387,
+        "provenance": "measured",
+        "cross_checked": {
+          "value": true,
+          "provenance": "derived"
+        }
+      }
+    },
+    {
+      "b": 4,
+      "n": 1024,
+      "d": 256,
+      "total": 1048576,
+      "mul_ns": {
+        "value": 1030910000.0,
+        "provenance": "measured"
+      },
+      "routed_ns": {
+        "value": 22748000.0,
+        "provenance": "measured"
+      },
+      "mul_over_routed": {
+        "value": 45.3189,
+        "provenance": "derived"
+      },
+      "taken_branches": {
+        "value": 523644,
+        "provenance": "measured"
+      },
+      "algebraic_ops": {
+        "value": 1048576,
+        "provenance": "specified",
+        "note": "n elementwise gfMuls timed; n subs + n predicates + taken gfAdds in routed"
+      },
+      "implementation_gfAdds": {
+        "value": 99622952,
+        "provenance": "measured",
+        "cross_checked": {
+          "value": true,
+          "provenance": "derived"
+        }
+      }
+    }
+  ],
+  "dominance_decision": {
+    "value": "mul-dominance is structural (ratio 27.6-50.5x across shapes, does not collapse toward 1x) -> kernel axis is the lever, per the track's stated decision rule",
+    "provenance": "derived"
+  },
+  "caveats": [
+    {
+      "value": "mul kernel runs forall-parallel while routed reduce is sequential by design; part of the 37-50x ratio is parallelism, not pure mul cost",
+      "provenance": "specified"
+    },
+    {
+      "value": "n=128 seq median is 0ns (below timer granularity); treat small-n seq as upper-bounded, not exact",
+      "provenance": "derived"
+    },
+    {
+      "value": "draft's reduceFusedIntent (forall with (+ reduce acc)) was incorrect as written \u2014 Chapel + is wrapping add, not gfAdd; replaced with per-task partials + single gfAdd combine",
+      "provenance": "specified"
+    },
+    {
+      "value": "draft's R7 used `d <= 0` on uint(64) (always true) and returned a per-element array; replaced with branchTaken predicate and scalar accumulation",
+      "provenance": "specified"
+    }
+  ],
+  "unresolved_slots": [
+    "sealed",
+    "consensus",
+    "commitment",
+    "proof",
+    "glyphs",
+    "META",
+    "Omega",
+    "resonance",
+    "worm_seal"
+  ],
+  "sealed": {
+    "value": null,
+    "provenance": "unknown"
+  },
+  "consensus": {
+    "value": null,
+    "provenance": "unknown"
+  },
+  "commitment": {
+    "value": null,
+    "provenance": "unknown"
+  },
+  "proof": {
+    "value": null,
+    "provenance": "unknown"
+  },
+  "glyphs": {
+    "value": null,
+    "provenance": "unknown"
+  },
+  "META": {
+    "value": null,
+    "provenance": "unknown"
+  },
+  "Omega": {
+    "value": null,
+    "provenance": "unknown"
+  },
+  "resonance": {
+    "value": null,
+    "provenance": "unknown"
+  },
+  "worm_seal": {
+    "value": null,
+    "provenance": "unknown"
+  }
+}
