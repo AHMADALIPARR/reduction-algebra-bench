@@ -1,0 +1,292 @@
+-- SPDX-License-Identifier: AGPL-3.0-or-later
+-- exp03_remora.remora -- Goldilocks reduction algebra in Remora (remorac ML dialect)
+--
+-- Phase-0 spec: SplitMix64 seed 0x00BEEFCAFE (counter-increment variant),
+-- Goldilocks p = 18446744069414584321, SUBLEQ predicate taken iff d <= 0
+-- (unsigned rep: rep == 0 or rep > p//2), verify-before-record.
+--
+-- Dialect reality (remorac, probed 2026-10-01): `int` lowers to i32 ONLY, no
+-- 64-bit integers, no quotient, no shifts, no bitwise ops, no clock. A u64 is
+-- therefore 8 little-endian bytes in i32 cells (each in [0,256)); every
+-- intermediate stays below 2^19 so all arithmetic is exact. Shifts and xor
+-- are rebuilt from bit tests (bit_j(v) <=> (v mod 2^(j+1)) >= 2^j); every op
+-- lifts over the leading frame by rank polymorphism, so the 1024-stream is
+-- computed with zero sequential threading: state_k = seed + k*INC (mod 2^64)
+-- is closed-form in the counter-increment variant -- no scan needed.
+-- There is no wall-clock builtin, so timings are recorded as null downstream.
+--
+-- Output: one int vector, parsed by the driver:
+--   [0..7]    crosslang checksum bytes (fold gfAdd8 over stream(1024))
+--   [8..71]   first-8 stream values, raveled (64 bytes)
+--   [72]      gate: reduceSeq == reduce1Tree      (n=64)
+--   [73]      gate: reduceSeq == reduceChunked   (n=64)
+--   [74]      gate: subleq partition identity    (n=64)
+--   [75]      subleq taken count                 (n=64)
+--   [76..83]  subleq routed sum bytes            (n=64)
+--   [84..91]  subleq total V sum bytes           (n=64)
+--   [92]      gate: gfMul8 small-value test
+--   [93]      gate: gfMul8 wraparound test
+--   [94]      gate: gfSub8 wraparound test
+
+def bit0 b = if (modulo b 2) >= 1 then 1 else 0
+def bit1 b = if (modulo b 4) >= 2 then 1 else 0
+def bit2 b = if (modulo b 8) >= 4 then 1 else 0
+def bit3 b = if (modulo b 16) >= 8 then 1 else 0
+def bit4 b = if (modulo b 32) >= 16 then 1 else 0
+def bit5 b = if (modulo b 64) >= 32 then 1 else 0
+def bit6 b = if (modulo b 128) >= 64 then 1 else 0
+def bit7 b = if b >= 128 then 1 else 0
+
+def shr3 b = (bit3 b) + 2*(bit4 b) + 4*(bit5 b) + 8*(bit6 b) + 16*(bit7 b)
+def shr6 b = (bit6 b) + 2*(bit7 b)
+def shr7 b = bit7 b
+def shl5m b = 32*b - 256*((bit3 b) + 2*(bit4 b) + 4*(bit5 b) + 8*(bit6 b) + 16*(bit7 b))
+def shl2m b = 4*b - 256*((bit6 b) + 2*(bit7 b))
+def shl1m b = 2*b - 256*(bit7 b)
+
+def xor8 x y = let d0 = if (bit0 x) == (bit0 y) then 0 else 1 in
+  let d1 = if (bit1 x) == (bit1 y) then 0 else 1 in
+  let d2 = if (bit2 x) == (bit2 y) then 0 else 1 in
+  let d3 = if (bit3 x) == (bit3 y) then 0 else 1 in
+  let d4 = if (bit4 x) == (bit4 y) then 0 else 1 in
+  let d5 = if (bit5 x) == (bit5 y) then 0 else 1 in
+  let d6 = if (bit6 x) == (bit6 y) then 0 else 1 in
+  let d7 = if (bit7 x) == (bit7 y) then 0 else 1 in
+  d0 + 2*d1 + 4*d2 + 8*d3 + 16*d4 + 32*d5 + 64*d6 + 128*d7
+
+def xor64 a b = map xor8 a b
+
+def carry64 a b = let t0 = a[0] + b[0] in
+  let c1 = if t0 >= 256 then 1 else 0 in
+  let t1 = a[1] + b[1] + c1 in
+  let c2 = if t1 >= 256 then 1 else 0 in
+  let t2 = a[2] + b[2] + c2 in
+  let c3 = if t2 >= 256 then 1 else 0 in
+  let t3 = a[3] + b[3] + c3 in
+  let c4 = if t3 >= 256 then 1 else 0 in
+  let t4 = a[4] + b[4] + c4 in
+  let c5 = if t4 >= 256 then 1 else 0 in
+  let t5 = a[5] + b[5] + c5 in
+  let c6 = if t5 >= 256 then 1 else 0 in
+  let t6 = a[6] + b[6] + c6 in
+  let c7 = if t6 >= 256 then 1 else 0 in
+  let t7 = a[7] + b[7] + c7 in
+  if t7 >= 256 then 1 else 0
+
+def add64 a b = let t0 = a[0] + b[0] in
+  let r0 = if t0 >= 256 then t0 - 256 else t0 in
+  let c1 = if t0 >= 256 then 1 else 0 in
+  let t1 = a[1] + b[1] + c1 in
+  let r1 = if t1 >= 256 then t1 - 256 else t1 in
+  let c2 = if t1 >= 256 then 1 else 0 in
+  let t2 = a[2] + b[2] + c2 in
+  let r2 = if t2 >= 256 then t2 - 256 else t2 in
+  let c3 = if t2 >= 256 then 1 else 0 in
+  let t3 = a[3] + b[3] + c3 in
+  let r3 = if t3 >= 256 then t3 - 256 else t3 in
+  let c4 = if t3 >= 256 then 1 else 0 in
+  let t4 = a[4] + b[4] + c4 in
+  let r4 = if t4 >= 256 then t4 - 256 else t4 in
+  let c5 = if t4 >= 256 then 1 else 0 in
+  let t5 = a[5] + b[5] + c5 in
+  let r5 = if t5 >= 256 then t5 - 256 else t5 in
+  let c6 = if t5 >= 256 then 1 else 0 in
+  let t6 = a[6] + b[6] + c6 in
+  let r6 = if t6 >= 256 then t6 - 256 else t6 in
+  let c7 = if t6 >= 256 then 1 else 0 in
+  let t7 = a[7] + b[7] + c7 in
+  let r7 = if t7 >= 256 then t7 - 256 else t7 in
+  [r0, r1, r2, r3, r4, r5, r6, r7]
+
+def divmod256 v = let b8 = if (modulo v 512) >= 256 then 1 else 0 in
+  let b9 = if (modulo v 1024) >= 512 then 1 else 0 in
+  let b10 = if (modulo v 2048) >= 1024 then 1 else 0 in
+  let b11 = if (modulo v 4096) >= 2048 then 1 else 0 in
+  let b12 = if (modulo v 8192) >= 4096 then 1 else 0 in
+  let b13 = if (modulo v 16384) >= 8192 then 1 else 0 in
+  let b14 = if (modulo v 32768) >= 16384 then 1 else 0 in
+  let b15 = if (modulo v 65536) >= 32768 then 1 else 0 in
+  let b16 = if (modulo v 131072) >= 65536 then 1 else 0 in
+  let b17 = if (modulo v 262144) >= 131072 then 1 else 0 in
+  let b18 = if v >= 262144 then 1 else 0 in
+  let q = b8 + 2*b9 + 4*b10 + 8*b11 + 16*b12 + 32*b13 + 64*b14 + 128*b15 + 256*b16 + 512*b17 + 1024*b18 in
+  [v - 256*q, q]
+
+def mul64 a b = let s0 = a[0]*b[0] in
+  let dq0 = divmod256 s0 in
+  let d0 = dq0[0] in
+  let c1 = dq0[1] in
+  let s1 = c1 + a[0]*b[1] + a[1]*b[0] in
+  let dq1 = divmod256 s1 in
+  let d1 = dq1[0] in
+  let c2 = dq1[1] in
+  let s2 = c2 + a[0]*b[2] + a[1]*b[1] + a[2]*b[0] in
+  let dq2 = divmod256 s2 in
+  let d2 = dq2[0] in
+  let c3 = dq2[1] in
+  let s3 = c3 + a[0]*b[3] + a[1]*b[2] + a[2]*b[1] + a[3]*b[0] in
+  let dq3 = divmod256 s3 in
+  let d3 = dq3[0] in
+  let c4 = dq3[1] in
+  let s4 = c4 + a[0]*b[4] + a[1]*b[3] + a[2]*b[2] + a[3]*b[1] + a[4]*b[0] in
+  let dq4 = divmod256 s4 in
+  let d4 = dq4[0] in
+  let c5 = dq4[1] in
+  let s5 = c5 + a[0]*b[5] + a[1]*b[4] + a[2]*b[3] + a[3]*b[2] + a[4]*b[1] + a[5]*b[0] in
+  let dq5 = divmod256 s5 in
+  let d5 = dq5[0] in
+  let c6 = dq5[1] in
+  let s6 = c6 + a[0]*b[6] + a[1]*b[5] + a[2]*b[4] + a[3]*b[3] + a[4]*b[2] + a[5]*b[1] + a[6]*b[0] in
+  let dq6 = divmod256 s6 in
+  let d6 = dq6[0] in
+  let c7 = dq6[1] in
+  let s7 = c7 + a[0]*b[7] + a[1]*b[6] + a[2]*b[5] + a[3]*b[4] + a[4]*b[3] + a[5]*b[2] + a[6]*b[1] + a[7]*b[0] in
+  let dq7 = divmod256 s7 in
+  let d7 = dq7[0] in
+  [d0, d1, d2, d3, d4, d5, d6, d7]
+
+def shr30 x = [(shr6 x[3]) + (shl2m x[4]), (shr6 x[4]) + (shl2m x[5]), (shr6 x[5]) + (shl2m x[6]), (shr6 x[6]) + (shl2m x[7]), (shr6 x[7]), 0, 0, 0]
+def shr27 x = [(shr3 x[3]) + (shl5m x[4]), (shr3 x[4]) + (shl5m x[5]), (shr3 x[5]) + (shl5m x[6]), (shr3 x[6]) + (shl5m x[7]), (shr3 x[7]), 0, 0, 0]
+def shr31 x = [(shr7 x[3]) + (shl1m x[4]), (shr7 x[4]) + (shl1m x[5]), (shr7 x[5]) + (shl1m x[6]), (shr7 x[6]) + (shl1m x[7]), (shr7 x[7]), 0, 0, 0]
+
+def zero8 = [0, 0, 0, 0, 0, 0, 0, 0]
+def ones8 = [1, 1, 1, 1, 1, 1, 1, 1]
+def seed8 = [254, 202, 239, 190, 0, 0, 0, 0]
+def inc8 = [21, 124, 74, 127, 185, 121, 55, 158]
+def c1_8 = [185, 229, 228, 28, 109, 71, 88, 191]
+def c2_8 = [235, 17, 49, 19, 187, 73, 208, 148]
+def negp8 = [255, 255, 255, 255, 0, 0, 0, 0]
+
+def modp z = if carry64 z negp8 == 1 then add64 z negp8 else z
+
+def gfAdd8 a b = let s = add64 a b in
+  if carry64 a b == 1 then add64 s negp8 else modp s
+
+def sum8 a = fold gfAdd8 zero8 a
+
+def pminus b = let bsum = ((((((b[0] + b[1]) + b[2]) + b[3]) + b[4]) + b[5]) + b[6]) + b[7] in
+  let t0 = 1 - b[0] in
+  let r0 = if t0 < 0 then t0 + 256 else t0 in
+  let w1 = if t0 < 0 then 1 else 0 in
+  let t1 = 0 - b[1] - w1 in
+  let r1 = if t1 < 0 then t1 + 256 else t1 in
+  let w2 = if t1 < 0 then 1 else 0 in
+  let t2 = 0 - b[2] - w2 in
+  let r2 = if t2 < 0 then t2 + 256 else t2 in
+  let w3 = if t2 < 0 then 1 else 0 in
+  let t3 = 0 - b[3] - w3 in
+  let r3 = if t3 < 0 then t3 + 256 else t3 in
+  let w4 = if t3 < 0 then 1 else 0 in
+  let t4 = 255 - b[4] - w4 in
+  let r4 = if t4 < 0 then t4 + 256 else t4 in
+  let w5 = if t4 < 0 then 1 else 0 in
+  let t5 = 255 - b[5] - w5 in
+  let r5 = if t5 < 0 then t5 + 256 else t5 in
+  let w6 = if t5 < 0 then 1 else 0 in
+  let t6 = 255 - b[6] - w6 in
+  let r6 = if t6 < 0 then t6 + 256 else t6 in
+  let w7 = if t6 < 0 then 1 else 0 in
+  let t7 = 255 - b[7] - w7 in
+  let r7 = if t7 < 0 then t7 + 256 else t7 in
+  let diff = [r0, r1, r2, r3, r4, r5, r6, r7] in
+  if bsum == 0 then zero8 else diff
+
+def gfSub8 a b = let nb = pminus b in
+  let s = add64 a nb in
+  if carry64 a nb == 1 then add64 s negp8 else modp s
+
+def bits64 b = ravel (map (\x -> [bit0 x, bit1 x, bit2 x, bit3 x, bit4 x, bit5 x, bit6 x, bit7 x]) b)
+
+def gfmul_step st bt = let a0 = st[0] in let a1 = st[1] in let a2 = st[2] in let a3 = st[3] in
+  let a4 = st[4] in let a5 = st[5] in let a6 = st[6] in let a7 = st[7] in
+  let x0 = st[8] in let x1 = st[9] in let x2 = st[10] in let x3 = st[11] in
+  let x4 = st[12] in let x5 = st[13] in let x6 = st[14] in let x7 = st[15] in
+  let acc = [a0, a1, a2, a3, a4, a5, a6, a7] in
+  let x = [x0, x1, x2, x3, x4, x5, x6, x7] in
+  let acc2 = if bt == 1 then gfAdd8 acc x else acc in
+  let x2 = gfAdd8 x x in
+  [acc2[0], acc2[1], acc2[2], acc2[3], acc2[4], acc2[5], acc2[6], acc2[7], x2[0], x2[1], x2[2], x2[3], x2[4], x2[5], x2[6], x2[7]]
+
+def gfMul8 a b = let bits = bits64 b in
+  let init = [0, 0, 0, 0, 0, 0, 0, 0, a[0], a[1], a[2], a[3], a[4], a[5], a[6], a[7]] in
+  let fin = fold gfmul_step init bits in
+  [fin[0], fin[1], fin[2], fin[3], fin[4], fin[5], fin[6], fin[7]]
+
+def mix st = let z1 = mul64 (xor64 st (shr30 st)) c1_8 in
+  let z2 = mul64 (xor64 z1 (shr27 z1)) c2_8 in
+  modp (xor64 z2 (shr31 z2))
+
+def u64_of_k k = let b0 = modulo k 256 in
+  let h8 = if (modulo k 512) >= 256 then 1 else 0 in
+  let h9 = if (modulo k 1024) >= 512 then 1 else 0 in
+  let h10 = if (modulo k 2048) >= 1024 then 1 else 0 in
+  let h11 = if (modulo k 4096) >= 2048 then 1 else 0 in
+  let h12 = if (modulo k 8192) >= 4096 then 1 else 0 in
+  let h13 = if k >= 8192 then 1 else 0 in
+  [b0, h8 + 2*h9 + 4*h10 + 8*h11 + 16*h12 + 32*h13, 0, 0, 0, 0, 0, 0]
+
+def stream1024 d = let ks = iota 1024 in
+  let k8 = map (\k -> u64_of_k (k + 1)) ks in
+  map (\k -> mix (add64 seed8 (mul64 k inc8))) k8
+
+def stream8v d = let ks = iota 8 in
+  let k8 = map (\k -> u64_of_k (k + 1)) ks in
+  map (\k -> mix (add64 seed8 (mul64 k inc8))) k8
+
+def stream64 d = let ks = iota 64 in
+  let k8 = map (\k -> u64_of_k (k + 1)) ks in
+  map (\k -> mix (add64 seed8 (mul64 k inc8))) k8
+
+def stream64_64 d = let ks = iota 64 in
+  let k8 = map (\k -> u64_of_k (k + 65)) ks in
+  map (\k -> mix (add64 seed8 (mul64 k inc8))) k8
+
+def stream64_128 d = let ks = iota 64 in
+  let k8 = map (\k -> u64_of_k (k + 129)) ks in
+  map (\k -> mix (add64 seed8 (mul64 k inc8))) k8
+
+def isZero8 d = (d[0] + d[1] + d[2] + d[3] + d[4] + d[5] + d[6] + d[7]) == 0
+
+def eq8 a b = isZero8 (gfSub8 a b)
+
+def taken_row d = let bsum = ((((((d[0] + d[1]) + d[2]) + d[3]) + d[4]) + d[5]) + d[6]) + d[7] in
+  let isz = bsum == 0 in
+  let gt = (d[7] > 128) || ((d[7] == 128) && ((bsum - d[7]) > 0)) in
+  isz || gt
+
+let s1024 = stream1024 0 in
+let cksum = fold gfAdd8 zero8 s1024 in
+let f8 = stream8v 0 in
+let flat8 = ravel f8 in
+let s64 = stream64 0 in
+let seq64 = fold gfAdd8 zero8 s64 in
+let tree64 = reduce gfAdd8 zero8 s64 in
+let g_seq_tree = if eq8 seq64 tree64 then 1 else 0 in
+let ch64 = reshape [8, 8, 8] s64 in
+let per64 = map sum8 ch64 in
+let chunk64 = fold gfAdd8 zero8 per64 in
+let g_seq_chunked = if eq8 seq64 chunk64 then 1 else 0 in
+let kk = stream64 0 in
+let qq = stream64_64 0 in
+let vv = stream64_128 0 in
+let dd = map gfSub8 kk qq in
+let takenV = map (\d v -> if taken_row d then v else zero8) dd vv in
+let unroutedV = map (\d v -> if taken_row d then zero8 else v) dd vv in
+let routed = fold gfAdd8 zero8 takenV in
+let unroutedSum = fold gfAdd8 zero8 unroutedV in
+let totalV = fold gfAdd8 zero8 vv in
+let g_partition = if eq8 (gfAdd8 routed unroutedSum) totalV then 1 else 0 in
+let takenCount = fold (+) 0 (map (\d -> if taken_row d then 1 else 0) dd) in
+let a200 = [200, 0, 0, 0, 0, 0, 0, 0] in
+let b300 = [44, 1, 0, 0, 0, 0, 0, 0] in
+let e60000 = [96, 234, 0, 0, 0, 0, 0, 0] in
+let g_gfmul_small = if eq8 (gfMul8 a200 b300) e60000 then 1 else 0 in
+let pm1 = [0, 0, 0, 0, 255, 255, 255, 255] in
+let two = [2, 0, 0, 0, 0, 0, 0, 0] in
+let pm2 = [255, 255, 255, 255, 254, 255, 255, 255] in
+let g_gfmul_wrap = if eq8 (gfMul8 pm1 two) pm2 then 1 else 0 in
+let five = [5, 0, 0, 0, 0, 0, 0, 0] in
+let eight = [8, 0, 0, 0, 0, 0, 0, 0] in
+let pm3 = [254, 255, 255, 255, 254, 255, 255, 255] in
+let g_gfsub_wrap = if eq8 (gfSub8 five eight) pm3 then 1 else 0 in
+[cksum[0], cksum[1], cksum[2], cksum[3], cksum[4], cksum[5], cksum[6], cksum[7], flat8[0], flat8[1], flat8[2], flat8[3], flat8[4], flat8[5], flat8[6], flat8[7], flat8[8], flat8[9], flat8[10], flat8[11], flat8[12], flat8[13], flat8[14], flat8[15], flat8[16], flat8[17], flat8[18], flat8[19], flat8[20], flat8[21], flat8[22], flat8[23], flat8[24], flat8[25], flat8[26], flat8[27], flat8[28], flat8[29], flat8[30], flat8[31], flat8[32], flat8[33], flat8[34], flat8[35], flat8[36], flat8[37], flat8[38], flat8[39], flat8[40], flat8[41], flat8[42], flat8[43], flat8[44], flat8[45], flat8[46], flat8[47], flat8[48], flat8[49], flat8[50], flat8[51], flat8[52], flat8[53], flat8[54], flat8[55], flat8[56], flat8[57], flat8[58], flat8[59], flat8[60], flat8[61], flat8[62], flat8[63], g_seq_tree, g_seq_chunked, g_partition, takenCount, routed[0], routed[1], routed[2], routed[3], routed[4], routed[5], routed[6], routed[7], totalV[0], totalV[1], totalV[2], totalV[3], totalV[4], totalV[5], totalV[6], totalV[7], g_gfmul_small, g_gfmul_wrap, g_gfsub_wrap]

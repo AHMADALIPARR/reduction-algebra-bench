@@ -1,0 +1,217 @@
+{
+  "schema": {
+    "value": "reduction-algebra-bench/exp03",
+    "provenance": "specified"
+  },
+  "experiment": {
+    "value": "exp03_remora",
+    "provenance": "specified"
+  },
+  "kernels": {
+    "source": {
+      "value": "remora/exp03/exp03*.remora (remorac interpreter, costigan/remora)",
+      "provenance": "specified"
+    },
+    "wiring": {
+      "value": "u64 as 8 LE bytes in i32 cells; SplitMix64 counter-increment variant; Goldilocks via carry-detecting add + 2^64-p add-back; SUBLEQ predicated masked select via unary index-map; seq/tree/chunked reductions; gfMul double-and-add",
+      "provenance": "specified"
+    },
+    "programs": {
+      "value": [
+        "exp03a_checksum.remora",
+        "exp03a_first8.remora",
+        "exp03b_reduce.remora",
+        "exp03c_subleq.remora",
+        "exp03d_gfops.remora",
+        "exp03_sweep.remora"
+      ],
+      "provenance": "specified",
+      "note": "monolithic exp03_remora.remora does not typecheck under remorac; see RUNLOG.md for the typechecker limitations worked around"
+    }
+  },
+  "prng": {
+    "algorithm": {
+      "value": "SplitMix64 counter-increment",
+      "provenance": "specified"
+    },
+    "seed": {
+      "value": "0x00BEEFCAFE",
+      "provenance": "specified"
+    },
+    "crosslang_checksum": {
+      "value": 1388262917130611548,
+      "provenance": "measured"
+    },
+    "cross_validated_bit_for_bit": {
+      "value": true,
+      "provenance": "derived",
+      "note": "first 8 values match substrate/splitmix64.py exactly; checksum matches 1388262917130611548"
+    }
+  },
+  "reduction_gates": {
+    "seq_tree_equal": {
+      "value": true,
+      "provenance": "measured"
+    },
+    "seq_chunked_equal": {
+      "value": true,
+      "provenance": "measured"
+    },
+    "subleq_partition_identity": {
+      "value": true,
+      "provenance": "measured"
+    },
+    "subleq_taken_count": {
+      "value": 34,
+      "provenance": "measured"
+    },
+    "subleq_taken_count_ref": {
+      "value": 34,
+      "provenance": "derived",
+      "note": "Python reference"
+    },
+    "gfMul_small": {
+      "value": true,
+      "provenance": "measured",
+      "note": "200*300==60000"
+    },
+    "gfMul_wrap": {
+      "value": true,
+      "provenance": "measured",
+      "note": "(p-1)*2 mod p == p-2"
+    },
+    "gfSub_wrap": {
+      "value": true,
+      "provenance": "measured",
+      "note": "(5-8) mod p == p-3"
+    }
+  },
+  "sweep": {
+    "128": {
+      "value": 17025989809213925053,
+      "provenance": "measured",
+      "note": "seq-sum mod p at n=128; ref 17025989809213925053"
+    },
+    "1024": {
+      "value": 1388262917130611548,
+      "provenance": "measured",
+      "note": "seq-sum mod p at n=1024; ref 1388262917130611548"
+    },
+    "8192": {
+      "value": 8386807993349546782,
+      "provenance": "measured",
+      "note": "seq-sum mod p at n=8192; ref 8386807993349546782"
+    }
+  },
+  "timing_protocol": {
+    "warmup": {
+      "value": 3,
+      "provenance": "specified"
+    },
+    "samples": {
+      "value": 20,
+      "provenance": "specified"
+    },
+    "aggregation": {
+      "value": "median",
+      "provenance": "specified"
+    },
+    "note": {
+      "value": "remorac (the available Remora implementation) exposes no wall-clock; the dialect has no time builtin (verified by grep of the runtime). All timings null, provenance unknown.",
+      "provenance": "specified"
+    }
+  },
+  "timings_ns": {
+    "seq_ns": {
+      "value": null,
+      "provenance": "unknown",
+      "note": "no clock in remorac dialect"
+    },
+    "tree_ns": {
+      "value": null,
+      "provenance": "unknown",
+      "note": "no clock in remorac dialect"
+    },
+    "chunked_ns": {
+      "value": null,
+      "provenance": "unknown",
+      "note": "no clock in remorac dialect"
+    },
+    "routed_ns": {
+      "value": null,
+      "provenance": "unknown",
+      "note": "no clock in remorac dialect"
+    }
+  },
+  "environment": {
+    "implementation": {
+      "value": "remorac (costigan/remora), interp target",
+      "provenance": "measured"
+    },
+    "int_width": {
+      "value": "i32 only (literals wrap mod 2^32)",
+      "provenance": "specified",
+      "note": "per remorac docs; u64 emulated in bytes"
+    }
+  },
+  "caveats": [
+    {
+      "value": "remorac is a Python re-imagining of Remora (ML-syntax), not the Kennedy Haskell implementation; int is i32-only, so u64/Goldilocks are emulated byte-wise",
+      "provenance": "specified"
+    },
+    {
+      "value": "No wall-clock builtin exists in the dialect; timing protocol values are null/unknown, not measured",
+      "provenance": "specified"
+    },
+    {
+      "value": "iota requires a compile-time constant shape in remorac; stream sizes are fixed per program",
+      "provenance": "specified"
+    },
+    {
+      "value": "remorac's whole-program typechecker rejects the monolithic program (binary map over indexing functions; first-class (==); 9-element array results); the five split programs are the executed artifacts",
+      "provenance": "specified"
+    }
+  ],
+  "unresolved_slots": [
+    {
+      "value": "timed benchmark medians (no clock)",
+      "provenance": "unknown"
+    },
+    {
+      "value": "sealed",
+      "provenance": "unknown"
+    },
+    {
+      "value": "consensus",
+      "provenance": "unknown"
+    },
+    {
+      "value": "commitment",
+      "provenance": "unknown"
+    },
+    {
+      "value": "proof",
+      "provenance": "unknown"
+    },
+    {
+      "value": "glyphs",
+      "provenance": "unknown"
+    },
+    {
+      "value": "META",
+      "provenance": "unknown"
+    },
+    {
+      "value": "Omega",
+      "provenance": "unknown"
+    },
+    {
+      "value": "resonance",
+      "provenance": "unknown"
+    },
+    {
+      "value": "worm_seal",
+      "provenance": "unknown"
+    }
+  ]
+}
