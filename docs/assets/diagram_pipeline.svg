@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="980" height="240" viewBox="0 0 980 240">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0b0e17"/><stop offset="1" stop-color="#111527"/>
+    </linearGradient>
+    <marker id="arr" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6 Z" fill="#22d3ee"/>
+    </marker>
+  </defs>
+  <rect width="980" height="240" rx="14" fill="url(#bg)"/>
+  <text x="490" y="34" text-anchor="middle" fill="#e8ecf8" font-family="sans-serif" font-size="19" font-weight="bold">The Reduction Pipeline</text>
+  <text x="490" y="56" text-anchor="middle" fill="#8b98b8" font-family="sans-serif" font-size="12">one instruction, one field, every array language</text>
+  <g font-family="sans-serif" font-size="12">
+    <rect x="20" y="90" width="160" height="90" rx="10" fill="#141a2e" stroke="#22d3ee" stroke-width="1.5"/>
+    <text x="100" y="118" text-anchor="middle" fill="#22d3ee" font-weight="bold">SplitMix64</text>
+    <text x="100" y="138" text-anchor="middle" fill="#8b98b8">seed 0x00BEEFCAFE</text>
+    <text x="100" y="156" text-anchor="middle" fill="#8b98b8">counter-increment</text>
+    <rect x="210" y="90" width="160" height="90" rx="10" fill="#141a2e" stroke="#f472b6" stroke-width="1.5"/>
+    <text x="290" y="118" text-anchor="middle" fill="#f472b6" font-weight="bold">Goldilocks field</text>
+    <text x="290" y="138" text-anchor="middle" fill="#8b98b8">p = 2&#8310;&#8308; &#8722; 2&#179;&#178; + 1</text>
+    <text x="290" y="156" text-anchor="middle" fill="#8b98b8">64-bit reps, exact</text>
+    <rect x="400" y="90" width="160" height="90" rx="10" fill="#141a2e" stroke="#fbbf24" stroke-width="1.5"/>
+    <text x="480" y="118" text-anchor="middle" fill="#fbbf24" font-weight="bold">SUBLEQ routing</text>
+    <text x="480" y="138" text-anchor="middle" fill="#8b98b8">branch iff d &#8804; 0</text>
+    <text x="480" y="156" text-anchor="middle" fill="#8b98b8">the only control flow</text>
+    <rect x="590" y="90" width="160" height="90" rx="10" fill="#141a2e" stroke="#34d399" stroke-width="1.5"/>
+    <text x="670" y="118" text-anchor="middle" fill="#34d399" font-weight="bold">Reduction</text>
+    <text x="670" y="138" text-anchor="middle" fill="#8b98b8">seq / tree / chunked</text>
+    <text x="670" y="156" text-anchor="middle" fill="#8b98b8">scan / segmented</text>
+    <rect x="780" y="90" width="180" height="90" rx="10" fill="#141a2e" stroke="#a78bfa" stroke-width="2"/>
+    <text x="870" y="118" text-anchor="middle" fill="#a78bfa" font-weight="bold">&#10214;&#937;&#10215; &#8592; VALID</text>
+    <text x="870" y="138" text-anchor="middle" fill="#8b98b8">WORM seal</text>
+    <text x="870" y="156" text-anchor="middle" fill="#8b98b8">SHA-256, append-only</text>
+    <line x1="180" y1="135" x2="206" y2="135" stroke="#22d3ee" stroke-width="2" marker-end="url(#arr)"/>
+    <line x1="370" y1="135" x2="396" y2="135" stroke="#22d3ee" stroke-width="2" marker-end="url(#arr)"/>
+    <line x1="560" y1="135" x2="586" y2="135" stroke="#22d3ee" stroke-width="2" marker-end="url(#arr)"/>
+    <line x1="750" y1="135" x2="776" y2="135" stroke="#22d3ee" stroke-width="2" marker-end="url(#arr)"/>
+  </g>
+  <text x="490" y="214" text-anchor="middle" fill="#5b6b8c" font-family="sans-serif" font-size="11">checksum 1388262917130611548 must reproduce in every language before any timing is recorded</text>
+</svg>
