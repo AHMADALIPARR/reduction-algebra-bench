@@ -1,0 +1,20 @@
+{
+  "experiment": "exp07",
+  "language": "April (APL in Common Lisp)",
+  "provenance": {
+    "gate": "unknown",
+    "sweep_1d": "unknown",
+    "sweep_subleq": "unknown",
+    "checksum": "unknown"
+  },
+  "gate": null,
+  "checksum": null,
+  "sweep_1d": null,
+  "sweep_subleq": null,
+  "null_reason": "Implementation written but not executed. SBCL not available in this build environment (apt-get install blocked: /var/lib/apt/lists/lock held by another process; package sbcl not locatable without apt-get update). Quicklisp + April therefore unavailable. The .lisp file implements the benchmark in Common Lisp with April for array topology, but no verification against real toolchain was possible. Time-box for runtime install exceeded.",
+  "toolchain": {
+    "required": "SBCL + Quicklisp + April (github.com/phantomics/april)",
+    "status": "Not installed"
+  },
+  "implementation_status": "Complete draft at april/exp07/exp07_april.lisp; uses Lisp bignums for exact field arithmetic (April's doubles cannot hold 2^64 exactly), April for array topology probes"
+}

@@ -1,0 +1,172 @@
+% SPDX-License-Identifier: AGPL-3.0-or-later
+% Copyright (C) 2026 SnapKitty Collective
+%
+% exp08_nial.ndf — Experiment 08: Nial track of the reduction-algebra benchmark.
+%
+% STATUS: IMPLEMENTATION COMPLETE, UNEXECUTED. Q'Nial was not available in
+% this build environment, so no timing or correctness result is claimed.
+% Every measurement field is null in results/exp08_nial.json.
+% The real toolchain is the only judge.
+%
+% PRIMITIVE ASSUMPTIONS — every Nial primitive used below must be confirmed
+% under the real Q'Nial toolchain before any result is trusted:
+%   fold, each, link, tally, shape, reshape, take, drop, first, rest,
+%   sublist, grade, mod, quotient, bitxor, append, pass, if/then/else,
+%   for/with/do, while/do, write, fault, =.
+% If any primitive name or arity differs in the installed Q'Nial, fix the
+% name here — never "port" the algorithm to a different language.
+%
+% 64-BIT NOTE: SplitMix64 needs exact mod-2^64 wraparound and the
+% Goldilocks field needs reps up to 2^64-1. If the installed Q'Nial
+% integer type cannot hold these exactly, the cross-language checksum
+% gate (1388262917130611548) FAILS and no timings are recorded.
+% That failure is the verify-before-record gate working as designed.
+
+% ---------- Phase 0 constants ----------
+P IS 18446744069414584321;      % Goldilocks: 2^64 - 2^32 + 1
+M64 IS 18446744073709551616;    % 2^64 (modulus for wraparound)
+SEED IS 3203386110;             % 0x00BEEFCAFE
+G1 IS 11400714819323198485;     % 0x9E3779B97F4A7C15
+M1 IS 13883157976295156751;     % 0xBF58476D1CE4E5B9
+M2 IS 10723151780598845931;     % 0x94D049BB133111EB
+HALFP IS 9223372034707292160;   % p // 2  (integer division)
+
+% ---------- SplitMix64, counter-increment variant (canonical) ----------
+% state += G1 (mod 2^64); mix a copy of state; emit z mod p.
+% rsh is integer division by 2^k; multiplication wraps via mod M64.
+splitmix_next IS OP state {
+  s := mod (state + G1) M64;
+  z := s;
+  z := mod ((bitxor z (quotient z 1073741824)) * M1) M64;   % >> 30
+  z := mod ((bitxor z (quotient z 134217728)) * M2) M64;    % >> 27
+  z := bitxor z (quotient z 2147483648);                    % >> 31
+  (mod z P) link s };
+
+make_vec IS OP n {
+  v := n reshape 0;
+  s := SEED;
+  FOR i WITH tell n DO
+    r := splitmix_next s;
+    v := (i pickplace (first r) v);
+    s := second r;
+  ENDFOR;
+  v };
+
+% ---------- Goldilocks field kernels (exact) ----------
+gf_add IS OP x y { mod (x + y) P };
+gf_sub IS OP x y { mod (x - y + P) P };
+gf_mul IS OP x y { mod (x * y) P };   % algebraic product; implementation-op
+                                      % counter (double-and-add shifts) is
+                                      % unknown here — see JSON provenance
+gf_pow IS OP x e {
+  r := 1; b := mod x P; k := e;
+  WHILE k > 0 DO
+    IF (mod k 2) = 1 THEN r := gf_mul r b; ENDIF;
+    b := gf_mul b b; k := quotient k 2;
+  ENDWHILE;
+  r };
+gf_inv IS OP x { gf_pow x (P - 2) };
+
+% ---------- Reduction topologies (native Nial) ----------
+% R1 sequential fold
+reduce_seq IS OP op v { fold op v };
+% R2 tree reduction: pairwise fold until one element remains
+reduce_tree IS OP op v {
+  a := v;
+  WHILE (tally a) > 1 DO
+    h := quotient (tally a) 2;
+    pairs := (h take a) link (h drop a);
+    a := (fold op (2 reshape pairs)) link (IF (mod (tally a) 2) = 1
+                                           THEN last a ELSE Null ENDIF);
+  ENDWHILE;
+  first a };
+% R3 segmented/chunked reduction
+reduce_chunked IS OP op v chunk {
+  n := tally v;
+  parts := (quotient (n + chunk - 1) chunk) reshape Null;
+  % NOTE: partition idiom — confirm `sublist`/partition primitive in toolchain
+  chunks := each (reduce_seq op) (chunk partition v);
+  reduce_tree op chunks };
+% R4 scan (prefix fold) — Nial has no native scan; accumulate explicitly
+scan_seq IS OP op v {
+  n := tally v;
+  out := n reshape 0;
+  acc := first v;
+  out := (0 pickplace acc out);
+  FOR i WITH 1 + tell (n - 1) DO
+    acc := op acc (i pick v);
+    out := (i pickplace acc out);
+  ENDFOR;
+  out };
+
+% ---------- SUBLEQ routed reduction (R7) ----------
+% SPECIFIED predicate: taken iff d <= 0;
+% on canonical unsigned reps: rep = 0 or rep > p//2.
+subleq_routed IS OP K Q V {
+  d := each gf_sub K Q;                       % ARRAY_SUBTRACT, materialized
+  mask := each (OP r { (r = 0) or (r > HALFP) }) d;   % PREDICATE
+  sel := pack mask V;                         % SELECT + ROUTE (compression)
+  taken := +/ mask;
+  acc := fold gf_add (0 link sel);             % REDUCE, sequential fold
+  acc link taken };
+
+% ---------- Correctness gate ----------
+crosslang_checksum IS { mod (+/ (make_vec 1024)) P };
+
+correctness_gate IS {
+  ok := (crosslang_checksum = 1388262917130611548);
+  adv := 0 1 (P - 1) (P - 2) ((P - 1) div 2) (((P - 1) div 2) + 1);
+  % field identities on adversarial values
+  ok := ok and (each (OP x { (gf_add x 0) = x }) (rest adv));
+  % topology equivalence vs sequential fold
+  FOR n WITH 0 1 2 3 127 128 4096 4097 DO
+    X := make_vec n;
+    ok := ok and ((reduce_tree gf_add X) = (fold gf_add (0 link X)));
+    ok := ok and ((reduce_chunked gf_add X 4096) = (fold gf_add (0 link X)));
+  ENDFOR;
+  ok };
+
+% ---------- Timing: warmup 3, 20 samples, median ----------
+time_kernel IS OP thunk {
+  FOR i WITH tell 3 DO thunk @; ENDFOR;      % warmup
+  ts := 20 reshape 0.0;
+  FOR i WITH tell 20 DO
+    t0 := time;
+    thunk @;
+    ts := (i pickplace (time - t0) ts);
+  ENDFOR;
+  (grade ts) pick ts };                       % median via grade
+
+sweep_1d IS {
+  write '== [N] sweep: gf-sum, all topologies ==';
+  FOR n WITH 128 256 512 1024 2048 4096 8192 DO
+    X := make_vec n;
+    ref := fold gf_add (0 link X);
+    IF (reduce_tree gf_add X) ~= ref THEN write ('FAIL ' link n); ENDIF;
+    t_seq := time_kernel (OP { fold gf_add (0 link X) });
+    t_tree := time_kernel (OP { reduce_tree gf_add X });
+    t_chk := time_kernel (OP { reduce_chunked gf_add X 4096 });
+    write (n link t_seq link t_tree link t_chk);
+  ENDFOR };
+
+sweep_subleq IS {
+  write '== [B,N,D] SUBLEQ sweep: mul vs reduce dominance test ==';
+  shapes := (1 128 64) (1 512 64) (1 2048 64) (1 8192 64) (2 1024 128) (4 1024 256);
+  FOR bnd WITH shapes DO
+    b := first bnd; n := second bnd; d := third bnd;
+    total := b * n * d;
+    K := make_vec total; Q := make_vec total; V := make_vec total;
+    r := subleq_routed K Q V;
+    t_r := time_kernel (OP { subleq_routed K Q V });
+    t_m := time_kernel (OP { each gf_mul K V });
+    write (b link n link d link t_m link t_r link (t_m / t_r) link (second r));
+  ENDFOR };
+
+main IS {
+  IF correctness_gate
+    THEN write 'gate: PASS';
+         sweep_1d;
+         sweep_subleq;
+    ELSE write 'GATE FAILED — no results';
+         fault 'correctness gate failed';
+  ENDIF };

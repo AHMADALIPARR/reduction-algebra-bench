@@ -1,0 +1,47 @@
+{
+  "experiment": "exp09",
+  "language": "Klong",
+  "provenance": {
+    "gate": "measured",
+    "sweep_1d": "measured",
+    "sweep_subleq": "unknown",
+    "checksum": "measured"
+  },
+  "gate": {
+    "status": "PASS",
+    "verified": "2026-10-01",
+    "checks": [
+      "crosslang_checksum_1024",
+      "adversarial_field_identities",
+      "topology_agreement_n_0_1_2_3_127_128_4096_4097"
+    ]
+  },
+  "checksum": {
+    "value": 1388262917130611548,
+    "description": "SplitMix64(seed=0x00BEEFCAFE, n=1024) sum mod p, counter-increment variant"
+  },
+  "sweep_1d": {
+    "protocol": "1 warmup, 5 samples, minimum reported (deviation from spec: 3 warmup, 20 samples, median)",
+    "unit": "seconds",
+    "data": [
+      {"n": 128, "sum": 0.000086, "tree": 0.001062, "chunked": 0.000244},
+      {"n": 256, "sum": 0.000185, "tree": 0.007568, "chunked": 0.000427},
+      {"n": 512, "sum": 0.000221, "tree": 0.03006, "chunked": 0.001101},
+      {"n": 1024, "sum": 0.000465, "tree": 0.130361, "chunked": 0.001769}
+    ],
+    "note": "tree is slower due to recursive treepair with globals; chunked uses chunk size 4096"
+  },
+  "sweep_subleq": null,
+  "null_reason": "sweep_subleq executed but output lost when /tmp was cleared (VM /tmp cleanup); not re-run due to time constraints",
+  "source_provenance": "CAUTION: the exact .kg source that produced sweep_1d was lost in the /tmp clear; klong/exp09/exp09_klong.kg is an earlier non-parsing draft, NOT the measured source. Measurements below are agent-reported from captured run output (2026-10-01); checksum value matches the canonical cross-language checksum. Not independently re-runnable from this tree.",
+  "toolchain": {
+    "source": "http://t3x.org/klong/klong20221212.tgz",
+    "build": "make kg (kg.c + s9core.c)",
+    "note": "Brief URL brianguertin/klong was wrong (404); correct is t3x.org/klong"
+  },
+  "deviations": [
+    "SUBLEQ sweep shapes reduced to [[1,128,64],[1,256,64]] for feasibility (mkvec ~16ms/value)",
+    "Timing protocol: 1 warmup/5 samples/minimum instead of 3/20/median",
+    "Klong identifiers cannot contain underscore (_ is drop verb)"
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "experiment": "exp08",
+  "language": "Nial",
+  "provenance": {
+    "gate": "unknown",
+    "sweep_1d": "unknown",
+    "sweep_subleq": "unknown",
+    "checksum": "unknown"
+  },
+  "gate": null,
+  "checksum": null,
+  "sweep_1d": null,
+  "sweep_subleq": null,
+  "null_reason": "Implementation written but not executed. Q'Nial binary installed (niallang/Nial_Development Originals/Linux64.zip) but script invocation method unclear; binary prints usage and exits with code 1 when given a .ndf file. Previous session (2026-10-01) reported successful install and basic measurements (signed 64-bit ints with overflow fault, no integer bitwise ops, 32-bit-limb SplitMix64 needed) but the working invocation was in /tmp (cleared) and not preserved. The .ndf file needs rewrite against real syntax (uses assumed primitives: fold, each, link, bitxor, etc.). Time-box for runtime install/verification exceeded.",
+  "toolchain": {
+    "source": "https://github.com/niallang/Nial_Development/releases/download/Originals/Linux64.zip",
+    "binary": "Linux/nial64",
+    "note": "Brief URL nial-array-language/nial was wrong; correct is niallang/Nial_Development"
+  },
+  "implementation_status": "Draft exists at nial/exp08/exp08_nial.ndf but uses unverified primitive assumptions; needs rewrite against real Q'Nial syntax"
+}

@@ -1,0 +1,50 @@
+# ERE-gated build brief — Agent 1: Remora (exp03) + SaC (exp04)
+
+Repo: ~/workspace/reduction-algebra-bench/
+You are one of 3 parallel agents building the remaining array-language tracks.
+Your deliverable will be run through the author's REAL ERE P1-P5 gates
+(prompt-coherence, response check, curate, prove entropy ≤ 0.20, WORM seal)
+before acceptance. Do NOT git commit anything. Leave files in the working tree.
+
+## Read first
+- spec/benchmarks_all_languages.json — the Remora and SaC entries (11 reduction
+  ops, 4-stage attention pipeline, 2 Goldilocks arith ops, shapes)
+- substrate/splitmix64.py — PRNG oracle (canonical stream)
+- chapel/exp01/shapesweep.chpl — reference implementation structure
+- results/exp01b_shapesweep.json — result schema: every value carries provenance
+  (measured | derived | specified | unknown). Nulls for unrunnable, NEVER fabricated.
+- wolfram/exp02/PRNG_DIVERGENCE_NOTE.md — why the counter-increment SplitMix64
+  variant is canonical (checksum 1388262917130611548)
+
+## Phase 0 spec (non-negotiable)
+- SplitMix64, seed 0x00BEEFCAFE, COUNTER-INCREMENT variant (see oracle).
+  If the language can do 64-bit arithmetic, reproduce the checksum bit-for-bit
+  before trusting any vector.
+- Goldilocks p = 18446744069414584321 (2^64 - 2^32 + 1).
+- SUBLEQ branch predicate SPECIFIED: taken iff d <= 0. On canonical unsigned
+  reps: taken iff rep == 0 or rep > p//2.
+- verify-before-record: every op validated against the scalar reference
+  (substrate/) before any timing is recorded. A failed gate -> no results.
+- Timing where measurable: 3 warmup, 20 samples, median. Tag the protocol.
+- Write IDIOMATIC code in the target language (native reductions, native
+  parallelism). No transliteration from another language.
+
+## Your languages
+1. **Remora** → remora/exp03/ — rank-polymorphic array language (Kennedy).
+   Likely no runnable implementation exists; write the full implementation
+   against the language as specified, results null with provenance unknown.
+2. **SaC** (Single Assignment C) → sac/exp04/ — try installing sac2c
+   (apt or build, time-box ~15 min). If it builds, compile and run for real.
+
+## Runtime rule
+Attempt install time-boxed (~15 min per language). If unavailable: implementation
+complete, results JSON with nulls (provenance unknown), RUNLOG.md stating exactly
+what was tried. NEVER fabricate numbers. NEVER claim a run that didn't happen.
+The real toolchain is the only judge.
+
+## Output (do not commit)
+remora/exp03/exp03_remora.<ext>, README.md, results/exp03_remora.json, RUNLOG.md
+sac/exp04/exp04_sac.sac, README.md, results/exp04_sac.json, RUNLOG.md
+
+Report back: files written, what executed (with real measured outputs),
+what is null and why, any spec questions (do not guess — ask in the report).

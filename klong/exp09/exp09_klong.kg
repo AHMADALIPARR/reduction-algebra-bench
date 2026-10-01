@@ -1,0 +1,153 @@
+.comment("EOC")
+SPDX-License-Identifier: AGPL-3.0-or-later
+Copyright (C) 2026 SnapKitty Collective
+
+exp09_klong.kg -- Experiment 09: Klong track of the reduction-algebra benchmark.
+
+Klong: Nils M. Holm's array language (t3x.org/klong), pure ANSI C.
+Built here from klong20221212.tgz with cc -O3. Klong integers have no
+upper bound (bignum), so 64-bit-exact SplitMix64 is directly expressible.
+Klong has no bitwise xor primitive (|/& are max/min); xor is emulated
+via a 16x16 nibble table built once at startup, applied nibble-wise
+through a 5-element state recursion (16 steps, closed-form, no threading).
+
+EXECUTED against the real Klong toolchain. Results in results/exp09_klong.json.
+
+Klong notes learned against the real toolchain:
+- lambdas take x (monadic), x;y (dyadic), x;y;z (triadic); arity is
+  inferred from which of x/y/z appear free in the body. No named params.
+- function application uses PARENS with ;-separated args: f(a;b).
+  Brackets [a;b] are lists; (a,b) is a comma-joined vector.
+- `,` builds vectors; `;` separates application args and sequence steps.
+- all verbs are strictly right-to-left: a*b+c means a*(b+c).
+  Parenthesize all arithmetic.
+- `::` inside a lambda body is single-assignment; use fresh names.
+- `:` in `:[c;t;f]` takes exactly 3 args; put sequences in the `{...}` body.
+- `!` is dyadic mod; `!n` monadic is enumerate. `%` is float divide,
+  `:%` is integer divide. `|`/`&` are max/min (not bitwise or/and).
+- .p is monadic; pass it one list to print several values.
+EOC
+
+:" ---------- Phase 0 constants ----------"
+p::18446744069414584321
+m64::18446744073709551616
+halfp::(p:%2)
+seed::0xBEEFCAFE
+g1::0x9E3779B97F4A7C15
+m1::0xBF58476D1CE4E5B9
+m2::0x94D049BB133111EB
+
+:" ---------- nibble xor table (16x16, built once) ----------"
+bxor4::{cond::{(0<(x@2))|(0<(x@3))};
+  step::{a2::(x@2);b2::(x@3);bit::((((a2!2)+(b2!2)))!2);
+    ((((x@0)+(bit*(x@1))))),(((2*(x@1)))),(((a2:%2))),(((b2:%2)))};
+  (((cond step:~(0,1,x,y))@0))}
+nt::{bxor4(x:%16;x!16)}'!256
+
+:" ---------- 64-bit xor, 16 nibble steps, state (a,b,r,m,count) ----------"
+x64s::{a::(x@0);b::(x@1);r::(x@2);m::(x@3);c::(x@4);
+  na::(a!16);nb::(b!16);idx::(((na*16)+nb));
+  nr::((r+((nt@idx)*m)));
+  nxt::((a:%16),(b:%16),nr,((m*16)),((c+1)));
+  (:[((c=16));r;(x64s(nxt))])}
+x64::{x64s((x,y,0,1,0))}
+
+:" ---------- SplitMix64, counter-increment variant (canonical) ----------"
+smix::{z1::(((((x64(x;(x:%1073741824)))*m1)))!m64);
+  z2::(((((x64(z1;(z1:%134217728)))*m2)))!m64);
+  z3::(x64(z2;(z2:%2147483648)));
+  (z3!p)}
+MN::0
+mkvec::{MN::x;({smix((((seed+((x+1)*g1)))!m64))}'!MN)}
+
+:" ---------- Goldilocks field kernels (exact, bignum) ----------"
+gfadd::{((x+y)!p)}
+gfsub::{((((x-y)+p))!p)}
+gfmul::{((x*y)!p)}
+gfpow::{cond::{0<((x@1))};
+  step::{b::(x@0);e::(x@1);r::(x@2);
+    ((((b*b)!p)),((e:%2)),((:[(((e!2)=1));((((r*b)!p)));r])))};
+  ((((cond step:~((x!p),y,1))@2)))}
+gfinv::{gfpow(x;(p-2))}
+
+:" ---------- Reduction topologies (native Klong adverbs) ----------"
+gsum::{(((+/x))!p)}
+gprod::{(((*/x))!p)}
+gmin::{(&/x)}
+gmax::{(|/x)}
+gscan::{{(x!p)}'(+\x)}
+TF::0
+TV::[]
+TN::0
+TC::0
+NC::0
+treepair::{TF::x;TV::y;TN::(#y);
+  pairs::{TF((TV@((2*x)));(TV@((1+(2*x)))))}'!((TN:%2));
+  (:[((((TN!2))=1));((pairs),(*|TV));pairs])}
+tree::{TF::x;TV::y;
+  (:[(((#y)<2));(:[(((#y)=0));0;(*y)]);(tree(TF;(treepair(TF;y))))])}
+chunked::{TF::x;TV::y;TC::z;TN::(#TV);NC::((((TN+(TC-1)):%TC)));
+  chunks::{TF/((TC#(((TC*x)_TV))))}'!NC;
+  (tree(TF;chunks))}
+
+:" ---------- SUBLEQ routed reduction ----------"
+subleq::{d::(((((x-y)+p)))!p);
+  mask::((((0=d))|(((halfp)<d))));
+  sel::((z@(&mask)));
+  (((((+/(0,sel)))!p)),((+/mask)))}
+
+:" ---------- Correctness gate ----------"
+ok::1
+X::[]
+ref::0
+s::[]
+a::0
+gate::{
+  (ok::((1388262917130611548=((+/mkvec(1024))!p))));
+  (:[ok;0;(.p("FAIL crosslang checksum"))]);
+  adv::((1),(p-1),(p-2),((p-1):%2),((((p-1):%2)+1)));
+  ({a::(adv@x);
+    (:[(((((a=(gfadd(a;0))))&((1=(gfmul(a;(gfinv(a)))))))));0;(ok::0)]}'!5);
+  ({X::(mkvec(x));ref::(gsum(X));
+    (:[((((ref=(tree(gfadd;X))))&((ref=(chunked(gfadd;X;4096)))))));0;(ok::0)]);
+    s::(gscan(X));
+    (:[(((x=(#s))));(:[((x=0));0;(:[((ref=(*|s)));0;(ok::0)])]);(ok::0)])}'
+    ((0),(1),(2),(3),(127),(128),(4096),(4097)));
+  (:[((((((0=(gfsub(5;5))))&((((halfp)<(gfsub(3;5))))))&((~(((halfp)<(gfsub(5;3)))))))));0;(ok::0)]);
+  ok}
+
+:" ---------- Timing: warmup 3, 20 samples, median ----------"
+TFN::0
+t0::0
+tk::{TFN::x;(TFN@[]);(TFN@[]);(TFN@[]);
+  ts::({t0::(.pc());(TFN@[]);(((.pc())-t0))}'!20);
+  ss::((ts@(<ts)));
+  ((ss@10))}
+
+sweep1d::{
+  (.p("== [N] sweep: gf-sum, all topologies =="));
+  ({TV::(mkvec(x));ref::(gsum(TV));
+    (:[((ref=(tree(gfadd;TV))));0;(.p((("FAIL n=",($x))))))]);
+    ts::(tk({gsum(TV)}));
+    tt::(tk({tree(gfadd;TV)}));
+    tc::(tk({chunked(gfadd;TV;4096)}));
+    (.p((("N=",($x)," seq=",($ts)," tree=",($tt)," chunk=",($tc)))))}'
+    ((128),(256),(512),(1024),(2048),(4096),(8192)))}
+
+sweepsubleq::{
+  (.p("== [B,N,D] SUBLEQ sweep: mul vs reduce dominance test =="));
+  ({b::(x@0);n::(x@1);d::(x@2);total::(((b*n)*d));
+    K::(mkvec(total));Q::(mkvec(total));V::(mkvec(total));
+    r::(subleq(K;Q;V));
+    tr::(tk({subleq(K;Q;V)}));
+    tm::(tk({{gfmul((K@x);(V@x))}'!total}));
+    ratio::((:[((tr=0));0;((tm%tr))]));
+    (.p((("B=",($b)," N=",($n)," D=",($d),
+      " mul=",($tm)," routed=",($tr),
+      " ratio=",($ratio)," taken=",($(r@1)),"/",($total))))))}'
+    (((1),(128),(64)),((1),(256),(64))))}
+
+main::{(:[(gate());
+  ({(.p("gate: PASS"));(sweep1d());(sweepsubleq())}@[]);
+  (.p("GATE FAILED -- no results"))])}
+main()

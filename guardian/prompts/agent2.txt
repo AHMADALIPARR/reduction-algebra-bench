@@ -1,0 +1,50 @@
+# ERE-gated build brief — Agent 2: Singeli (exp05) + TinyAPL (exp06)
+
+Repo: ~/workspace/reduction-algebra-bench/
+You are one of 3 parallel agents building the remaining array-language tracks.
+Your deliverable will be run through the author's REAL ERE P1-P5 gates
+(prompt-coherence, response check, curate, prove entropy ≤ 0.20, WORM seal)
+before acceptance. Do NOT git commit anything. Leave files in the working tree.
+
+## Read first
+- spec/benchmarks_all_languages.json — the Singeli and TinyAPL entries
+- substrate/splitmix64.py — PRNG oracle (canonical stream)
+- chapel/exp01/shapesweep.chpl — reference implementation structure
+- results/exp01b_shapesweep.json — result schema: every value carries provenance
+  (measured | derived | specified | unknown). Nulls for unrunnable, NEVER fabricated.
+- wolfram/exp02/PRNG_DIVERGENCE_NOTE.md — why the counter-increment SplitMix64
+  variant is canonical (checksum 1388262917130611548)
+
+## Phase 0 spec (non-negotiable)
+- SplitMix64, seed 0x00BEEFCAFE, COUNTER-INCREMENT variant (see oracle).
+  If the language can do 64-bit arithmetic, reproduce the checksum bit-for-bit
+  before trusting any vector.
+- Goldilocks p = 18446744069414584321 (2^64 - 2^32 + 1).
+- SUBLEQ branch predicate SPECIFIED: taken iff d <= 0. On canonical unsigned
+  reps: taken iff rep == 0 or rep > p//2.
+- verify-before-record: every op validated against the scalar reference
+  (substrate/) before any timing is recorded. A failed gate -> no results.
+- Timing where measurable: 3 warmup, 20 samples, median. Tag the protocol.
+- Write IDIOMATIC code in the target language (native reductions, native
+  parallelism). No transliteration from another language.
+
+## Your languages
+1. **Singeli** → singeli/exp05/ — SIMD DSL for .NET. Check for `dotnet` SDK;
+   Singeli ships as a NuGet package. Time-box the install attempt ~15 min.
+   If dotnet is absent, write the implementation, results null.
+2. **TinyAPL** → tinyapl/exp06/ — tiny APL interpreter in C
+   (github.com/TinyAPL/TinyAPL). Try clone + build (needs a C compiler).
+   Time-box ~15 min. If it builds, run the benchmark for real.
+
+## Runtime rule
+Attempt install time-boxed (~15 min per language). If unavailable: implementation
+complete, results JSON with nulls (provenance unknown), RUNLOG.md stating exactly
+what was tried. NEVER fabricate numbers. NEVER claim a run that didn't happen.
+The real toolchain is the only judge.
+
+## Output (do not commit)
+singeli/exp05/exp05_singeli.<ext>, README.md, results/exp05_singeli.json, RUNLOG.md
+tinyapl/exp06/exp06_tinyapl.<ext>, README.md, results/exp06_tinyapl.json, RUNLOG.md
+
+Report back: files written, what executed (with real measured outputs),
+what is null and why, any spec questions (do not guess — ask in the report).
